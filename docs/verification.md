@@ -4,7 +4,7 @@
 
 ## 2026-11-25 项目与 SDK 完整更名
 
-仓库及本地目录统一为 snapflow-im。Scala 命名空间与发布坐标、Python/Dart/Flutter 包及入口、npm 包、iOS 插件、HOCON 根键和环境变量已同步更名；不保留旧名称转发。数据库 SQL、消息字段和 HTTP 路由不变，持久化通知通道与默认 Flutter 缓存数据库文件名保留原值。历史部署及压测证据保留当时名称。升级边界见[开发与配置](development.md#完整更名与接入边界)。
+仓库及本地目录统一为 snapflow-im。Scala 命名空间与发布坐标、Python/Dart/Flutter 包及入口、npm 包、iOS 插件、HOCON 根键和环境变量已同步更名；不保留旧名称转发。数据库 SQL、消息字段和 HTTP 路由不变，PostgreSQL 通知通道统一为 `snapflow_im_changes`，不保留旧通道兼容逻辑；默认 Flutter 缓存数据库文件名保留原值。历史部署及压测证据保留当时名称。升级边界见[开发与配置](development.md#完整更名与接入边界)。
 
 清理 Scala 编译产物后，`just check` 通过 353 项测试：uni-app 34、Python 112、Dart 37、Flutter Client 25、Flutter 示例 1、Scala Client 39、Scala Server 63、benchmark 41、维护工具 1；维护工具另 3 项数据库测试未提供专用环境，显式跳过，不算通过。统一版本、文档／Schema／OpenAPI、分层、命名及各语言格式和静态检查通过。Python 新入口可导入，旧包入口不存在。
 

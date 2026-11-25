@@ -121,7 +121,7 @@ def purge_notifications(connection, app, sender, entries, *, apply=False):
                     hashlib.sha256((app + "\0" + user).encode()).digest()
                 ).decode().rstrip("=")
                 connection.execute(
-                    "SELECT pg_notify('polyglot_im_changes',%s)", (channel,)
+                    "SELECT pg_notify('snapflow_im_changes',%s)", (channel,)
                 )
     return {
         "requested": len(targets),

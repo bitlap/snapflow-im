@@ -51,7 +51,7 @@ final class ChangeFeed[F[_]: Async] private (
           _ <- Async[F].blocking {
             connection.setAutoCommit(true)
             val statement = connection.createStatement()
-            try statement.execute("LISTEN polyglot_im_changes")
+            try statement.execute("LISTEN snapflow_im_changes")
             finally statement.close()
           }
           // LISTEN 提交后补拉一次，覆盖启动和断线重连窗口。

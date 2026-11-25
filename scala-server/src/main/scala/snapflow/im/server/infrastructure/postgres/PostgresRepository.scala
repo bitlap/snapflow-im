@@ -178,7 +178,7 @@ final class PostgresRepository[F[_]: Async](
   private def databaseNow(c: Connection): Long =
     query(c, "SELECT floor(extract(epoch FROM clock_timestamp()))::bigint", Nil)(_.getLong(1)).head
   private def notifyChange(c: Connection, who: Identity): Unit = {
-    query(c, "SELECT pg_notify('polyglot_im_changes', ?)", Seq(RoutingKey(who)))(_ => ()); ()
+    query(c, "SELECT pg_notify('snapflow_im_changes', ?)", Seq(RoutingKey(who)))(_ => ()); ()
   }
   private def message(r: ResultSet): StoredMessage = StoredMessage(
     r.getString("message_id"),
