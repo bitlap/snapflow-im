@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 import '../../ports/ios_push_platform.dart';
 
 /// 通过 Flutter 原生通道读取 iOS 推送事件、权限、token 和角标。
@@ -10,8 +10,8 @@ class MethodChannelPush
         IosPushSettingsPlatform {
   /// 创建无状态的 iOS 方法/事件通道适配器，实际系统调用按需执行。
   const MethodChannelPush();
-  static const _methods = MethodChannel('polyglot_im/apns');
-  static const _events = EventChannel('polyglot_im/apns_events');
+  static const _methods = MethodChannel('snapflow_im/apns');
+  static const _events = EventChannel('snapflow_im/apns_events');
 
   /// 订阅原生推送 token 或通知点击事件。
   @override

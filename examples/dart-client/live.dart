@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:polyglot_im/polyglot_im.dart';
-import 'package:polyglot_im/sqlite.dart';
+import 'package:snapflow_im/snapflow_im.dart';
+import 'package:snapflow_im/sqlite.dart';
 
 Future<void> main(List<String> args) async {
   final config =

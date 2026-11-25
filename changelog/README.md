@@ -9,4 +9,4 @@
 | [0.1.1](0.1.1.md) |
 | [0.1.0](0.1.0.md) |
 
-[返回 Polyglot IM 项目首页](../README.md)
+[返回 SnapFlow IM 项目首页](../README.md)

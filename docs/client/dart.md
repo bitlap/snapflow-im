@@ -2,11 +2,11 @@
 
 Dart 仅提供用户端能力，不提供 NotificationSender、NotificationPublisher 或业务 Outbox；业务通知由后端发布。单聊发送由 ImClient.sendText 提供。
 
-纯 Dart 工程依赖 `polyglot_im`，核心 API 与存储接口由主入口导出。本地 SQLite 使用独立入口 `sqlite.dart`，不重导出到 Flutter Client，避免与 Flutter 平台的 SqliteCache 混淆。
+纯 Dart 工程依赖 `snapflow_im`，核心 API 与存储接口由主入口导出。本地 SQLite 使用独立入口 `sqlite.dart`，不重导出到 Flutter Client，避免与 Flutter 平台的 SqliteCache 混淆。
 
 ```dart
-import 'package:polyglot_im/polyglot_im.dart';
-import 'package:polyglot_im/sqlite.dart';
+import 'package:snapflow_im/snapflow_im.dart';
+import 'package:snapflow_im/sqlite.dart';
 
 final store = await SqliteCache.open('/app/data/im.sqlite');
 final client = ImClient(
@@ -41,7 +41,7 @@ try {
 可信 Dart VM 宿主可通过独立入口 postgres.dart 使用 PostgresCache，Flutter 主入口不重导出该适配器：
 
 ```dart
-import 'package:polyglot_im/postgres.dart';
+import 'package:snapflow_im/postgres.dart';
 
 final store = await PostgresCache.open(
   postgresUrl, namespace: 'desktop-installation',

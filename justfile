@@ -157,7 +157,7 @@ benchmark *args:
 
 # CI 功能冒烟，不覆盖正式基准结果，不设置跨机器性能门槛。
 benchmark-smoke:
-    uv run --project python-client --locked python -m benchmark.run --smoke --instances 2 --output /tmp/polyglot-im-benchmark-smoke.json
+    uv run --project python-client --locked python -m benchmark.run --smoke --instances 2 --output /tmp/snapflow-im-benchmark-smoke.json
 
 # 仅发布 Scala Client 到本机 Ivy，供宿主按固定版本消费；不上传注册表。
 publish-local-scala:

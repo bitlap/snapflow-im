@@ -2,7 +2,7 @@
 
 ## 目标
 
-polyglot-im 提供独立的消息服务与 Scala、Dart / Flutter、Python、uni-app Client，支持业务通知及文字、Unicode 表情单聊。
+snapflow-im 提供独立的消息服务与 Scala、Dart / Flutter、Python、uni-app Client，支持业务通知及文字、Unicode 表情单聊。
 
 当前能力见[功能说明](features.md)。业务用户、好友关系与作品资源由宿主管理。
 

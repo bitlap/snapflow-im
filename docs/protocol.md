@@ -27,7 +27,7 @@ title/text 可选，长度各不超过 2048 Unicode 码点；payload 编码后�
 Authorization: Bearer。用户可配置宿主不透明会话校验，默认适配器见[集成说明](integration.md)；生产者始终使用独立 HS256 JWT。JWT 模式 claim：
 
 ```json
-{"iss":"polyglot-im","aud":"polyglot-im","app_id":"your-app","sub":"user-or-service-id","role":"user","exp":1900000000}
+{"iss":"snapflow-im","aud":"snapflow-im","app_id":"your-app","sub":"user-or-service-id","role":"user","exp":1900000000}
 ```
 
 issuer 与服务配置一致。用户、服务使用不同签名密钥；service 必须额外包含 types 与 recipients 字符串数组，只有明确授权的类型和接收者可以发送，`*` 表示授权全部。密钥由后端安全管理，不进入 App。可选 nbf 会验证。示例 exp 只是字段说明，生产应签发短期令牌。

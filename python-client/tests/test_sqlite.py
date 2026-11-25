@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from polyglot_im import Scope, SqliteCache
+from snapflow_im import Scope, SqliteCache
 
 SCOPE = Scope("https://im.example", "app", "alice")
 FIXTURES = Path(__file__).resolve().parents[2] / "protocol/fixtures"

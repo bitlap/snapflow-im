@@ -22,12 +22,12 @@ def main():
     with socket.socket() as reservation:
         reservation.bind(("127.0.0.1", 0))
         port = reservation.getsockname()[1]
-    with tempfile.TemporaryDirectory(prefix="polyglot-im-integration-") as directory:
+    with tempfile.TemporaryDirectory(prefix="snapflow-im-integration-") as directory:
         runtime = Path(directory)
         env = {
             **os.environ,
-            "POLYGLOT_IM_DEMO_PORT": str(port),
-            "POLYGLOT_IM_DEMO_DIRECTORY": str(runtime),
+            "SNAPFLOW_IM_DEMO_PORT": str(port),
+            "SNAPFLOW_IM_DEMO_DIRECTORY": str(runtime),
         }
         with (runtime / "server.log").open("w+") as log:
             server = subprocess.Popen(
@@ -81,7 +81,7 @@ def main():
                     ["python3", "tools/pack_uniapp.py"], cwd=ROOT, check=True
                 )
                 version = (ROOT / "VERSION").read_text().strip()
-                package = ROOT / f"dist/uniapp-client/bitlap-polyglot-im-{version}.tgz"
+                package = ROOT / f"dist/uniapp-client/bitlap-snapflow-im-{version}.tgz"
                 consumer = runtime / "uniapp-consumer"
                 subprocess.run(
                     [
@@ -103,8 +103,8 @@ def main():
                     cwd=ROOT,
                     env={
                         **env,
-                        "POLYGLOT_IM_UNIAPP_ENTRY": str(
-                            consumer / "node_modules/@bitlap/polyglot-im/index.js"
+                        "SNAPFLOW_IM_UNIAPP_ENTRY": str(
+                            consumer / "node_modules/@bitlap/snapflow-im/index.js"
                         ),
                     },
                     check=True,

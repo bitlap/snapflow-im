@@ -12,9 +12,9 @@ uv run --project python-client python examples/python-client/live.py
 
 ```python
 import os
-from polyglot_im import ApiClient, NotificationSender
-from polyglot_im.transport import AuthenticatedTransport
-from polyglot_im.adapters.httpx import open_httpx_transport
+from snapflow_im import ApiClient, NotificationSender
+from snapflow_im.transport import AuthenticatedTransport
+from snapflow_im.adapters.httpx import open_httpx_transport
 
 class ServiceTokens:
     async def token(self):
@@ -42,7 +42,7 @@ async def publish_task(task_id, user_id):
 ## 用户接收、缓存和已读
 
 ```python
-from polyglot_im import ImClient, Scope, SqliteCache
+from snapflow_im import ImClient, Scope, SqliteCache
 
 client = ImClient(user_api, base_url, Scope(base_url, app_id, user_id),
                   device_id, SqliteCache('/app/data/im.db'))
@@ -70,7 +70,7 @@ finally:
 与业务 PostgresOutbox 分开，PostgresCache 实现同一 ClientCache 接口。安装 postgres 可选依赖后，可将已有 AsyncConnectionPool 注入 `PostgresCache(pool, namespace='desktop-installation')`，调用 `await store.initialize()` 显式建表；该方式不关闭借用的池。自有池使用：
 
 ```python
-from polyglot_im import PostgresCache, open_postgres_cache
+from snapflow_im import PostgresCache, open_postgres_cache
 
 async with open_postgres_cache(
     postgres_dsn, namespace='desktop-installation', max_size=8, timeout=15,

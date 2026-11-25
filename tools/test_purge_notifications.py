@@ -76,7 +76,7 @@ def test_purge_scrubs_events_preserves_other_messages_and_is_idempotent(database
     assert preview == {"requested": 2, "matched": 2, "changed": 2, "applied": False}
     assert c.execute("SELECT cursor FROM snap_flow.im_user_state").fetchone()[0] == 3
     with psycopg.connect(c.info.dsn, autocommit=True) as listener:
-        listener.execute("LISTEN polyglot_im_changes")
+        listener.execute("LISTEN snapflow_im_changes")
         result = purge_notifications(c, "app", "producer", entries, apply=True)
         notifications = list(listener.notifies(timeout=1, stop_after=1))
         assert len(notifications) == 1

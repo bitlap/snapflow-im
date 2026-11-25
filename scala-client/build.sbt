@@ -2,7 +2,7 @@ ThisBuild / organization := "org.bitlap"
 ThisBuild / version      := IO.read((ThisBuild / baseDirectory).value.getParentFile / "VERSION").trim
 ThisBuild / scalaVersion := "3.6.3"
 ThisBuild / scalacOptions ++= Seq("-encoding", "UTF-8", "-deprecation", "-feature", "-unchecked")
-ThisBuild / homepage       := Some(url("https://github.com/bitlap/polyglot-im"))
+ThisBuild / homepage       := Some(url("https://github.com/bitlap/snapflow-im"))
 ThisBuild / licenses       := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0"))
 ThisBuild / publish / skip := false
 ThisBuild / publish        := sys.error("远程发布未配置；使用 just publish-local-scala")
@@ -22,7 +22,7 @@ lazy val distributionSettings = Seq(
 lazy val root = (project in file("."))
   .settings(distributionSettings)
   .settings(
-    name := "polyglot-im-scala-client",
+    name := "snapflow-im-scala-client",
     libraryDependencies ++= Seq(
       "co.fs2"        %% "fs2-core"          % "3.11.0",
       "org.typelevel" %% "cats-core"         % "2.12.0",
@@ -35,6 +35,6 @@ lazy val root = (project in file("."))
       "io.circe"      %% "circe-parser"      % "0.14.10",
       "org.scalameta" %% "munit"             % "1.0.3" % Test
     ),
-    Test / javaOptions += "-Dpolyglot.im.root=" + baseDirectory.value.getParentFile.getAbsolutePath,
+    Test / javaOptions += "-Dsnapflow.im.root=" + baseDirectory.value.getParentFile.getAbsolutePath,
     Test / fork := true
   )

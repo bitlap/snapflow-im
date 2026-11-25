@@ -1,6 +1,6 @@
-# Polyglot IM Benchmark
+# SnapFlow IM Benchmark
 
-[返回 Polyglot IM 项目首页](../README.md)
+[返回 SnapFlow IM 项目首页](../README.md)
 
 模块版本随根目录 VERSION。压测使用真实 HTTP/WS、JWT、HikariCP 和 PostgreSQL，测量业务通知与同步负载；文字单聊需要独立负载模型。普通测试不运行长时间压测。
 
@@ -476,7 +476,7 @@ HTTPcore 1.0.9 在请求入池或移出时扫描连接、空闲连接与排队�
 
 本基准 HTTPX timeout=30 分别约束连接、读取、写入和取连接等阶段，并非整请求总时限；成功请求的总耗时可以超过 30 秒，不能把这类长尾改记为零或丢弃。[HTTPX 超时说明](https://www.python-httpx.org/advanced/timeouts/)。
 
-服务端对同一生产者的配额记录执行原子更新，对接收者的顺序/游标状态使用行锁；它们是写入争用的候选路径。读取请求也经过全局限流，仍有配额更新和 WAL。源码约束不等于本次锁对象已定位。[测量版本 PostgresStore](https://github.com/bitlap/polyglot-im/blob/d08edd764278db0d40de1dcf0076314ec2961748/scala-server/src/main/scala/polyglot/im/server/infrastructure/postgres/PostgresStore.scala)。
+服务端对同一生产者的配额记录执行原子更新，对接收者的顺序/游标状态使用行锁；它们是写入争用的候选路径。读取请求也经过全局限流，仍有配额更新和 WAL。源码约束不等于本次锁对象已定位。[测量版本 PostgresStore](https://github.com/bitlap/snapflow-im/blob/d08edd764278db0d40de1dcf0076314ec2961748/scala-server/src/main/scala/polyglot/im/server/infrastructure/postgres/PostgresStore.scala)。
 
 ### 仍无法由本次结果确定的事项
 

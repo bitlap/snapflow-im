@@ -5,9 +5,9 @@ from contextlib import asynccontextmanager
 
 import httpx
 
-from polyglot_im import ApiClient, ImClient, JsonCodec, RetryPolicy, Scope
-from polyglot_im.adapters.httpx import open_httpx_transport
-from polyglot_im.domain.cache import apply_page, empty_cache
+from snapflow_im import ApiClient, ImClient, JsonCodec, RetryPolicy, Scope
+from snapflow_im.adapters.httpx import open_httpx_transport
+from snapflow_im.domain.cache import apply_page, empty_cache
 
 
 class PrefixCodec(JsonCodec):

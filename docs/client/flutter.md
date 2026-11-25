@@ -1,17 +1,17 @@
 # Flutter Client 集成
 
-Flutter App 只声明 `polyglot_im_flutter`，它重导出 Dart 核心；纯 Dart 工程只依赖 `polyglot_im`。Flutter 3.44+、Dart 3.12+；原生推送仅提供 iOS APNs 适配。
+Flutter App 只声明 `snapflow_im_flutter`，它重导出 Dart 核心；纯 Dart 工程只依赖 `snapflow_im`。Flutter 3.44+、Dart 3.12+；原生推送仅提供 iOS APNs 适配。
 
 ```yaml
 dependencies:
-  polyglot_im_flutter:
-    path: ../polyglot-im/flutter-client
+  snapflow_im_flutter:
+    path: ../snapflow-im/flutter-client
 ```
 
 ## 初始化与消息页
 
 ```dart
-import 'package:polyglot_im_flutter/polyglot_im_flutter.dart';
+import 'package:snapflow_im_flutter/snapflow_im_flutter.dart';
 
 final store = await SqliteCache.openDefault();
 final client = ImClient(

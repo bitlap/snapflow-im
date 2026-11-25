@@ -1,6 +1,6 @@
-# Polyglot IM Python Client
+# SnapFlow IM Python Client
 
-分发包名为 `polyglot-im`，Python 导入名为 `polyglot_im`；仓库目录仍为 python-client。
+分发包名为 `snapflow-im`，Python 导入名为 `snapflow_im`；仓库目录仍为 python-client。
 
 Python 3.11+ 异步消息 SDK，支持通知及文字单聊，提供通知发送、HTTP/WebSocket 同步、SQLite / PostgreSQL 消息缓存和 PostgreSQL 业务事务 Outbox。宿主管理事件循环、身份与资源生命周期，网络和数据库适配器支持注入。
 
@@ -15,9 +15,9 @@ uv pip install './python-client[http,postgres]'
 ```python
 import asyncio
 import os
-from polyglot_im import ApiClient, NotificationSender
-from polyglot_im.adapters.httpx import open_httpx_transport
-from polyglot_im.transport import AuthenticatedTransport
+from snapflow_im import ApiClient, NotificationSender
+from snapflow_im.adapters.httpx import open_httpx_transport
+from snapflow_im.transport import AuthenticatedTransport
 
 
 class ServiceTokens:
@@ -50,7 +50,7 @@ asyncio.run(main())
 用户客户端通过 `ClientCache` 注入存储，随包提供标准库实现 `SqliteCache`：
 
 ```python
-from polyglot_im import SqliteCache
+from snapflow_im import SqliteCache
 
 store = SqliteCache("/app/data/im.sqlite")
 # 将 store 传入 ImClient；复用相同路径和 scope 可重启恢复。
@@ -71,7 +71,7 @@ uv run --project python-client --locked python examples/python-client/live.py
 just test-python
 ```
 
-[可运行示例](../examples/python-client/README.md) · [完整集成](../docs/client/python.md) · [业务 Outbox 示例](../docs/integration.md) · [返回 Polyglot IM 项目首页](../README.md)
+[可运行示例](../examples/python-client/README.md) · [完整集成](../docs/client/python.md) · [业务 Outbox 示例](../docs/integration.md) · [返回 SnapFlow IM 项目首页](../README.md)
 
 ## 用户单聊
 
@@ -84,7 +84,7 @@ HTTP 使用 `code/message/data` 通用信封，Client 自动解包；服务端�
 api 提供便捷入口，service 编排同步与通知，domain 维护模型与缓存归并，ports 定义网络/存储/编解码契约；SQLite / PostgreSQL 缓存、HTTPX、websockets 与 PostgreSQL Outbox 位于 adapters。重试参数位于 config，异常位于 common。原顶层与 client/transport/outbox 导入保持可用。
 
 ```python
-from polyglot_im import ApiClient, ImClient
+from snapflow_im import ApiClient, ImClient
 
 
 def assemble(scope, device_id, transport, socket_connector, store, codec):

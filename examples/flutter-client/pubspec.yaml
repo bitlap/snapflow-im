@@ -1,5 +1,5 @@
-name: polyglot_im_example
-description: Polyglot IM iOS 集成示例
+name: snapflow_im_example
+description: SnapFlow IM iOS 集成示例
 publish_to: none
 version: 0.1.1
 environment:
@@ -7,7 +7,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  polyglot_im_flutter:
+  snapflow_im_flutter:
     path: ../../flutter-client
 dev_dependencies:
   integration_test:

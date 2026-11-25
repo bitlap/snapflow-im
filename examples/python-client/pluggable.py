@@ -1,6 +1,6 @@
 """显式传入适配器；资源由调用方的 async with 管理。"""
 
-from polyglot_im import (
+from snapflow_im import (
     ApiClient,
     AuthenticatedTransport,
     ClientCache,

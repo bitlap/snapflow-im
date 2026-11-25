@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:polyglot_im_flutter/polyglot_im_flutter.dart';
+import 'package:snapflow_im_flutter/snapflow_im_flutter.dart';
 
 void main() {
   test('只导入 Flutter Client 即可访问 Dart 核心模型', () {

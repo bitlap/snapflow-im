@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from polyglot_im import Message
+from snapflow_im import Message
 
 FIXTURE = Path(__file__).resolve().parents[2] / "protocol/fixtures/message.json"
 
@@ -39,7 +39,7 @@ def test_reject_future_schema():
 
 
 def test_direct_unicode_fixture_and_revisioned_cache():
-    from polyglot_im.client import apply_page, empty_cache
+    from snapflow_im.client import apply_page, empty_cache
 
     data = json.loads(FIXTURE.with_name("direct-message.json").read_text())
     assert Message.from_dict(data).to_dict() == data
@@ -69,7 +69,7 @@ def test_review_action_shared_fixture():
 
 
 def test_selective_notification_state_and_stale_history():
-    from polyglot_im.client import apply_page, empty_cache
+    from snapflow_im.client import apply_page, empty_cache
 
     data = json.loads(FIXTURE.with_name("notification-actions.json").read_text())
     state = apply_page(empty_cache(), data["initial"])
@@ -87,7 +87,7 @@ def test_selective_notification_state_and_stale_history():
 
 
 def test_direct_tombstone_and_clear_watermark_reject_stale_history():
-    from polyglot_im.domain.cache import apply_page, empty_cache
+    from snapflow_im.domain.cache import apply_page, empty_cache
 
     data = json.loads((FIXTURE.parent / "direct-controls.json").read_text())
     state = apply_page(empty_cache(), data["initial"])
@@ -108,7 +108,7 @@ def test_account_deletion_shared_response():
 
 
 def test_receipt_privacy_rejects_stale_history():
-    from polyglot_im.domain.cache import apply_page, empty_cache
+    from snapflow_im.domain.cache import apply_page, empty_cache
 
     data = json.loads((FIXTURE.parent / "direct-controls.json").read_text())
     state = apply_page(empty_cache(), data["receipt_visible"])

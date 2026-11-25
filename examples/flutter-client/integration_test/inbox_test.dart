@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:polyglot_im_flutter/polyglot_im_flutter.dart';
+import 'package:snapflow_im_flutter/snapflow_im_flutter.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ void main() {
     expect((await reopened.load(alice))['cursor'], 'opaque');
     expect((await reopened.load(bob))['cursor'], isNull);
     expect(await reopened.installationId(), device);
-    const native = MethodChannel('polyglot_im/apns');
+    const native = MethodChannel('snapflow_im/apns');
     expect(
       await native.invokeMethod<String>('currentToken'),
       anyOf(isNull, isA<String>()),

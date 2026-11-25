@@ -1,4 +1,4 @@
-# Polyglot IM Dart Client 示例
+# SnapFlow IM Dart Client 示例
 
 先在另一终端从仓库根目录运行 `just demo-server`。
 

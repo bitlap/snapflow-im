@@ -1,4 +1,4 @@
-# polyglot-im 开发约定
+# snapflow-im 开发约定
 
 - 面向 Scala、Dart/Flutter、Python、uni-app 的跨平台 IM 单仓库；统一入口为根目录 justfile。
 - Scala 子项目直接位于根目录 scala-client / scala-server，各自维护 build.sbt、project 与 Scalafmt 配置，不在根目录聚合 sbt，也不增加 jvm 容器层。

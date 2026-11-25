@@ -9,8 +9,8 @@ import java.net.URI
 import cats.effect.{IO, IOApp}
 import cats.syntax.all.*
 import io.circe.Json
-import polyglot.im.*
-import polyglot.im.transport.*
+import snapflow.im.*
+import snapflow.im.transport.*
 
 object Publish extends IOApp.Simple {
   val run: IO[Unit] = JdkTransport.resource[IO](URI.create(sys.env("IM_BASE_URL"))).use {

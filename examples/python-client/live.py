@@ -5,9 +5,9 @@ import json
 import sys
 from pathlib import Path
 
-from polyglot_im import ApiClient, ImClient, NotificationSender, Scope, SqliteCache
-from polyglot_im.adapters.httpx import open_httpx_transport
-from polyglot_im.transport import AuthenticatedTransport
+from snapflow_im import ApiClient, ImClient, NotificationSender, Scope, SqliteCache
+from snapflow_im.adapters.httpx import open_httpx_transport
+from snapflow_im.transport import AuthenticatedTransport
 
 
 class Tokens:

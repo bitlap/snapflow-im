@@ -1,4 +1,4 @@
-# Polyglot IM iOS 示例
+# SnapFlow IM iOS 示例
 
 只依赖 Flutter Client 单一入口，演示真实 HTTP/WS、SQLite、未读/已读、列表分页、APNs 绑定和生命周期恢复。
 
@@ -21,4 +21,4 @@ flutter test integration_test/inbox_test.dart -d <iOS-simulator-id> \
 
 演示服务重启后请重新执行 flutter run，读取新生成的地址/凭证；使用随机端口隔离不同演示数据库的客户端缓存。正式服务地址保持稳定并保留数据库，不采用此演示策略。
 
-[返回 Polyglot IM 项目首页](../../README.md)
+[返回 SnapFlow IM 项目首页](../../README.md)

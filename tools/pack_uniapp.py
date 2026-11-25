@@ -8,7 +8,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 output = root / "dist/uniapp-client"
 output.mkdir(parents=True, exist_ok=True)
-with tempfile.TemporaryDirectory(prefix="polyglot-im-uniapp-") as directory:
+with tempfile.TemporaryDirectory(prefix="snapflow-im-uniapp-") as directory:
     package = Path(directory)
     for name in ("package.json", "index.js", "README.md"):
         shutil.copyfile(root / "uniapp-client" / name, package / name)

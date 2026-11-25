@@ -4,7 +4,7 @@ import asyncio
 
 import pytest
 
-from polyglot_im import (
+from snapflow_im import (
     ImError,
     NotificationIntent,
     OutboxClaim,

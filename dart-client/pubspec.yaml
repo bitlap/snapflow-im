@@ -1,8 +1,8 @@
-name: polyglot_im
-description: polyglot-im 跨平台消息协议与 Dart Client 基础，提供消息编解码和契约模型。
+name: snapflow_im
+description: SnapFlow IM 跨平台消息协议与 Dart Client 基础，提供消息编解码和契约模型。
 version: 0.1.1
 publish_to: none
-repository: https://github.com/bitlap/polyglot-im
+repository: https://github.com/bitlap/snapflow-im
 
 environment:
   sdk: ">=3.12.0 <4.0.0"

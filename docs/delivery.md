@@ -1,6 +1,6 @@
 # 消息一致性与可达性契约
 
-Polyglot IM 的可靠消息链路采用**允许重复的至少一次同步、服务端幂等写入和客户端状态去重**。它不提供端到端“恰好一次（Exactly-once）”投递或业务执行保证。至少一次的恢复能力以消息已提交、数据仍保留、有效身份与网络恢复、客户端继续同步为前提；不承诺在任意故障下必达，也没有固定送达时限。
+SnapFlow IM 的可靠消息链路采用**允许重复的至少一次同步、服务端幂等写入和客户端状态去重**。它不提供端到端“恰好一次（Exactly-once）”投递或业务执行保证。至少一次的恢复能力以消息已提交、数据仍保留、有效身份与网络恢复、客户端继续同步为前提；不承诺在任意故障下必达，也没有固定送达时限。
 
 本契约适用于已实现的业务通知、文字与 Unicode 表情单聊，以及默认持久化适配器。使用 MemoryCache、替换适配器或自行处理同步时，宿主必须承担相应的持久化与恢复责任。
 
@@ -90,9 +90,9 @@ WebSocket 在连接内按已发送位置继续读后续页，**没有逐消息�
 
 现有测试覆盖：
 
-- [StoreSuite](../scala-server/src/test/scala/polyglot/im/server/RepositorySuite.scala)：事务、幂等、单调已读、过期游标与推送抑制。
-- [DistributedStoreSuite](../scala-server/src/test/scala/polyglot/im/server/DistributedRepositorySuite.scala)：跨连接池去重/顺序、快照一致、监听恢复、无通知补拉、租约接管和重试预算。
-- [MultiProcessSuite](../scala-server/src/test/scala/polyglot/im/server/MultiProcessSuite.scala)：跨 JVM 唤醒与进程强杀后恢复。
+- [StoreSuite](../scala-server/src/test/scala/snapflow/im/server/RepositorySuite.scala)：事务、幂等、单调已读、过期游标与推送抑制。
+- [DistributedStoreSuite](../scala-server/src/test/scala/snapflow/im/server/DistributedRepositorySuite.scala)：跨连接池去重/顺序、快照一致、监听恢复、无通知补拉、租约接管和重试预算。
+- [MultiProcessSuite](../scala-server/src/test/scala/snapflow/im/server/MultiProcessSuite.scala)：跨 JVM 唤醒与进程强杀后恢复。
 - [端口替换测试](../python-client/tests/test_ports.py)：自定义缓存/Socket 下提交先于 ack，以及会话释放；各端也有对应缓存失败和重放测试。
 
 这些证据不包括 Apple 真机必达、跨地域分区下持续可写、数据库主备切换零丢失或任意业务副作用的恰好一次执行。验证命令与环境见[验证记录](verification.md)，容量与延迟见[基准报告](../benchmark/README.md)。

@@ -12,18 +12,18 @@ import pytest
 
 @pytest.fixture(scope="session")
 def postgres_dsn():
-    configured = os.environ.get("POLYGLOT_IM_TEST_POSTGRES_DSN")
+    configured = os.environ.get("SNAPFLOW_IM_TEST_POSTGRES_DSN")
     if configured:
         yield configured
         return
     root = Path(__file__).resolve().parents[2]
-    with tempfile.TemporaryDirectory(prefix="polyglot-im-pg-test-") as directory:
+    with tempfile.TemporaryDirectory(prefix="snapflow-im-pg-test-") as directory:
         runtime = Path(directory)
         with (runtime / "server.log").open("w+") as log:
             server = subprocess.Popen(
-                ["sbt", "Test/runMain polyglot.im.server.PostgresTestServer"],
+                ["sbt", "Test/runMain snapflow.im.server.PostgresTestServer"],
                 cwd=root / "scala-server",
-                env={**os.environ, "POLYGLOT_IM_TEST_DIRECTORY": directory},
+                env={**os.environ, "SNAPFLOW_IM_TEST_DIRECTORY": directory},
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 start_new_session=True,

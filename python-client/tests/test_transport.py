@@ -5,8 +5,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from polyglot_im import AuthenticatedTransport, HttpRequest
-from polyglot_im.adapters.httpx import HttpxTransport, open_httpx_transport
+from snapflow_im import AuthenticatedTransport, HttpRequest
+from snapflow_im.adapters.httpx import HttpxTransport, open_httpx_transport
 
 
 class Tokens:

@@ -23,18 +23,18 @@ HTTP 路由位于 api.http，消息处理位于 service，数据和校验位于 
 - Flutter 的 SqliteCache 由宿主打开和关闭；账号或环境切换时释放旧客户端，再使用新的缓存命名空间。
 - 消息与游标落盘成功后才允许 ack。服务端发送在同一事务写入消息、事件和 Outbox。
 
-注入自有资源的可运行示例：[Scala](../examples/scala-client/src/main/scala/polyglot/im/examples/ClientWiring.scala)、[Dart](../examples/dart-client/pluggable.dart)、[Python](../examples/python-client/pluggable.py)、[Server 鉴权](../examples/scala-server/src/main/scala/polyglot/im/server/ServerWiring.scala)。
+注入自有资源的可运行示例：[Scala](../examples/scala-client/src/main/scala/snapflow/im/examples/ClientWiring.scala)、[Dart](../examples/dart-client/pluggable.dart)、[Python](../examples/python-client/pluggable.py)、[Server 鉴权](../examples/scala-server/src/main/scala/snapflow/im/server/ServerWiring.scala)。
 
 ## 模块与包名
 
 | 模块 | 发布名 / 导入名 |
 | --- | --- |
-| scala-client | org.bitlap:polyglot-im-scala-client_3 / polyglot.im |
-| scala-server | polyglot-im-scala-server（构建模块，不发布） |
-| dart-client | polyglot_im |
-| flutter-client | polyglot_im_flutter |
-| python-client | polyglot-im / polyglot_im |
-| uniapp-client | @bitlap/polyglot-im |
+| scala-client | org.bitlap:snapflow-im-scala-client_3 / snapflow.im |
+| scala-server | snapflow-im-scala-server（构建模块，不发布） |
+| dart-client | snapflow_im |
+| flutter-client | snapflow_im_flutter |
+| python-client | snapflow-im / snapflow_im |
+| uniapp-client | @bitlap/snapflow-im |
 
 Flutter 应用只需依赖 Flutter Client；该包导出 Dart Client 的公共 API。纯 Dart 工程直接使用 Dart Client。所有模块版本读取根目录 VERSION。
 

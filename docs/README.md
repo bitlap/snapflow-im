@@ -1,4 +1,4 @@
-# Polyglot IM 文档
+# SnapFlow IM 文档
 
 | 文档 | 内容 |
 | --- | --- |

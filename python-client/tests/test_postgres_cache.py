@@ -9,7 +9,7 @@ import pytest
 from psycopg import sql
 from psycopg_pool import AsyncConnectionPool
 
-from polyglot_im import PostgresCache, Scope, open_postgres_cache
+from snapflow_im import PostgresCache, Scope, open_postgres_cache
 
 SCOPE = Scope("https://im.example", "app", "alice")
 FIXTURES = Path(__file__).resolve().parents[2] / "protocol/fixtures"

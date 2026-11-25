@@ -4,7 +4,7 @@
 
 ## IM 服务端 PostgreSQL
 
-服务端共15张表，均位于 `snap_flow`。除 `im_schema` 外，完整初始结构及逐字段注释在 [schema.sql](../scala-server/src/main/resources/db/schema.sql)；`im_schema` 及其 `version` 字段的注释在 [PostgresRepository.scala](../scala-server/src/main/scala/polyglot/im/server/infrastructure/postgres/PostgresRepository.scala) 的 `initialize`。
+服务端共15张表，均位于 `snap_flow`。除 `im_schema` 外，完整初始结构及逐字段注释在 [schema.sql](../scala-server/src/main/resources/db/schema.sql)；`im_schema` 及其 `version` 字段的注释在 [PostgresRepository.scala](../scala-server/src/main/scala/snapflow/im/server/infrastructure/postgres/PostgresRepository.scala) 的 `initialize`。
 
 | 表 | 职责 |
 | --- | --- |
@@ -37,10 +37,10 @@
 
 | 表／用途 | 含表与逐字段注释的源码 |
 | --- | --- |
-| PostgreSQL `im_client_cache`：namespace、scope、data | [Scala](../scala-client/src/main/scala/polyglot/im/infrastructure/cache/PostgresCache.scala)、[Python](../python-client/src/polyglot_im/adapters/cache/postgres_cache.py)、[Dart VM](../dart-client/lib/src/adapters/cache/postgres_cache.dart) |
-| SQLite `im_cache`：scope、data | [Scala](../scala-client/src/main/scala/polyglot/im/infrastructure/cache/SqliteCache.scala)、[Dart VM](../dart-client/lib/src/adapters/cache/sqlite_cache.dart)、[Flutter](../flutter-client/lib/src/adapters/cache/sqlite_cache.dart) |
-| Python SQLite `cache`：scope、data | [Python](../python-client/src/polyglot_im/adapters/cache/sqlite_cache.py) |
+| PostgreSQL `im_client_cache`：namespace、scope、data | [Scala](../scala-client/src/main/scala/snapflow/im/infrastructure/cache/PostgresCache.scala)、[Python](../python-client/src/snapflow_im/adapters/cache/postgres_cache.py)、[Dart VM](../dart-client/lib/src/adapters/cache/postgres_cache.dart) |
+| SQLite `im_cache`：scope、data | [Scala](../scala-client/src/main/scala/snapflow/im/infrastructure/cache/SqliteCache.scala)、[Dart VM](../dart-client/lib/src/adapters/cache/sqlite_cache.dart)、[Flutter](../flutter-client/lib/src/adapters/cache/sqlite_cache.dart) |
+| Python SQLite `cache`：scope、data | [Python](../python-client/src/snapflow_im/adapters/cache/sqlite_cache.py) |
 | Flutter SQLite `im_installation`：id | [Flutter](../flutter-client/lib/src/adapters/cache/sqlite_cache.dart) |
-| PostgreSQL `im_producer_outbox`：业务事务通知意图 | [Scala](../scala-client/src/main/scala/polyglot/im/infrastructure/store/PostgresOutbox.scala)、[Python](../python-client/src/polyglot_im/adapters/store/postgres_outbox.py) |
+| PostgreSQL `im_producer_outbox`：业务事务通知意图 | [Scala](../scala-client/src/main/scala/snapflow/im/infrastructure/store/PostgresOutbox.scala)、[Python](../python-client/src/snapflow_im/adapters/store/postgres_outbox.py) |
 
 PostgreSQL Cache 的默认 schema 为 `snap_flow`，三端可配置；Python Outbox 也可配置 schema，Scala Outbox 固定为 `snap_flow`。`im_producer_outbox` 位于业务宿主数据库，与服务端 `im_outbox` 分离。Flutter、uni-app不提供PostgreSQL连接入口。uni-app使用uni持久化，无本项目定义的SQL表。文件与内存缓存也没有SQL表。隔离、事务及资源所有权见[客户端存储](client/storage.md)。

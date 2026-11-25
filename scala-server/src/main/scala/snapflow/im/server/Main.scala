@@ -1,0 +1,32 @@
+package snapflow.im.server
+
+import snapflow.im.server.api.http.Server
+import snapflow.im.server.config.AppSettings
+
+import cats.effect.{ExitCode, IO, IOApp, Resource}
+import cats.syntax.all.*
+import fs2.io.net.Network
+
+/** 读取服务配置并运行受资源作用域管理的 IM 服务。 */
+object Main extends IOApp {
+  private given Network[IO] = Network.forAsync[IO]
+
+  /** 装配并初始化仓储、鉴权、HTTP/WS 与后台任务，退出时统一取消并释放。 */
+  def resource(config: AppSettings): Resource[IO, org.http4s.server.Server] =
+    resource(config, snapflow.im.server.bootstrap.ServerComponents.postgres[IO](config))
+
+  /** 装配并初始化仓储、鉴权、HTTP/WS 与后台任务，退出时统一取消并释放。 */
+  def resource(
+      config: AppSettings,
+      components: snapflow.im.server.bootstrap.ServerComponents[IO]
+  ): Resource[IO, org.http4s.server.Server] =
+    snapflow.im.server.bootstrap.ServerApplication.resource[IO](config, components)
+
+  /** 运行入口任务直到完成或取消，资源随作用域退出而释放。 */
+  def run(args: List[String]): IO[ExitCode] = for {
+    config <- IO
+      .blocking(AppSettings.location(args).flatMap(path => AppSettings.load(path)))
+      .flatMap(result => IO.fromEither(result.left.map(new IllegalArgumentException(_))))
+    result <- resource(config).useForever.as(ExitCode.Success)
+  } yield result
+}

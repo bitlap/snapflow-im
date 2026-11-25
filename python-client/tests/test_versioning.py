@@ -102,8 +102,8 @@ def test_upgrade_updates_locks_and_preserves_existing_history(repository, existi
         if command[0] == "uv":
             p = repository / "python-client/uv.lock"
             text = p.read_text().replace(
-                f'name = "polyglot-im"\nversion = "{old_version}"',
-                f'name = "polyglot-im"\nversion = "{new_version}"',
+                f'name = "snapflow-im"\nversion = "{old_version}"',
+                f'name = "snapflow-im"\nversion = "{new_version}"',
             )
             p.write_text(text)
         if command[0] in {"dart", "flutter"}:
@@ -123,7 +123,7 @@ def test_upgrade_updates_locks_and_preserves_existing_history(repository, existi
     else:
         for module in MODULES:
             assert (
-                f"## {module if module != 'polyglot-im' else '项目与构建'}"
+                f"## {module if module != 'snapflow-im' else '项目与构建'}"
                 in custom_log.read_text()
             )
     for name, content in before.items():

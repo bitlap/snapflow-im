@@ -1,6 +1,8 @@
-# Polyglot IM
+# SnapFlow IM
 
-**多语言、跨平台的即时消息基础设施。** Polyglot 表示多语言，IM 表示即时消息。
+**SnapFlow 的多语言、跨平台即时消息基础设施。** 提供服务端及 Scala、Dart/Flutter、Python、uni-app 客户端。
+
+仓库、各语言 SDK 包名、Scala 发布坐标和配置前缀统一使用 `snapflow-im` 命名；各语言导入方式见[客户端文档](docs/client/README.md)。
 
 面向 Scala、Flutter / Dart、Python 与 uni-app 的跨平台 IM 服务和 Client，提供文字与表情单聊、App 业务通知、可靠同步、本地缓存与 iOS 推送适配。通信协议、服务端和各语言 SDK 在同一仓库维护，以 **just** 统一检查、测试和构建入口。包注册表发布尚未启用。
 
@@ -41,7 +43,7 @@
 
 ## Flutter App 接入入口
 
-Flutter App 只依赖 `polyglot_im_flutter`，该包会引入并导出 `polyglot_im` 的公共能力。Dart 核心保持独立，供纯 Dart 工程复用；生命周期、SQLite 与 iOS APNs 由 Flutter 层适配。用法与能力边界见[Flutter 集成文档](docs/client/flutter.md)。
+Flutter App 只依赖 `snapflow_im_flutter`，该包会引入并导出 `snapflow_im` 的公共能力。Dart 核心保持独立，供纯 Dart 工程复用；生命周期、SQLite 与 iOS APNs 由 Flutter 层适配。用法与能力边界见[Flutter 集成文档](docs/client/flutter.md)。
 
 ## 环境
 
@@ -57,8 +59,8 @@ Flutter App 只依赖 `polyglot_im_flutter`，该包会引入并导出 `polyglot
 IM 服务端和可信业务后端的事务 Outbox 使用可配置的 PostgreSQL；用户端本地缓存由各 SDK 的存储适配器或宿主实现提供。服务端连接、连接池及 Python DSN 配置见[开发与配置](docs/development.md)。不要求 Redis。APNs 可显式关闭。演示服务使用仅测试依赖中的临时 PostgreSQL，无需 Docker。
 
 ```sh
-git clone git@github.com:bitlap/polyglot-im.git
-cd polyglot-im
+git clone git@github.com:bitlap/snapflow-im.git
+cd snapflow-im
 just setup
 just check
 just package

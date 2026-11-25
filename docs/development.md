@@ -1,5 +1,13 @@
 # 开发与配置
 
+## 完整更名与接入边界
+
+项目与仓库名为 `snapflow-im`。Scala 包为 `snapflow.im`，Python/Dart 为 `snapflow_im`，Flutter 为 `snapflow_im_flutter`，npm 为 `@bitlap/snapflow-im`；Maven/Ivy 使用 `org.bitlap:snapflow-im-scala-client_3`。服务 HOCON 根键、默认签发者及受众为 `snapflow-im`，环境变量以 `SNAPFLOW_IM_` 开头，iOS 插件为 `SnapflowImPlugin`。不提供旧名称转发。
+
+宿主必须同步更新依赖、导入、锁文件及 CI 固定 IM 提交；Flutter 原生插件需重新解析依赖并构建。已有私有部署配置需在部署时显式更新根键、JVM 属性、环境变量及签发者/受众，不能继续使用旧默认值生成的服务凭证。实例应整体切换，避免混用鉴权配置；本次仅修改源码，不部署、修改私密配置或轮换生产凭证。
+
+数据库 schema/table、消息字段与 HTTP 路径保持原有协议。PostgreSQL LISTEN/NOTIFY 通道统一为 `snapflow_im_changes`，服务端监听、事务通知与维护清理工具均使用该名称，不监听或双发旧通道。Flutter 默认本地数据库文件名 `polyglot_im.db` 保持不变以继续读取已有缓存，该文件名不是源码兼容入口。历史部署目录、旧签发者记录和压测原始证据在运维与验证记录中保留当时名称，不能视为新版部署命令。
+
 ## 工具链
 
 使用 JDK 17+、sbt 1.10.7、Scala 3.6.3、Flutter 3.44.6 / Dart 3.12.2、Python 3.11+、uv 0.11.32、just 1.40.0、Node 22（uni-app 测试及真实网络示例）。CI 固定版本；本机版本变化须通过检查后再更新基线。
@@ -13,9 +21,9 @@ just 不安装全局工具链，不是跨语言依赖解析器。Python 使用 u
 
 ## 目录与代码风格
 
-- Scala：包名 `polyglot.im`，两空格缩进，Scala 3；Circe 处理 JSON，Scalafmt 120 列。Scala Client 发布组织标识为 `org.bitlap`，对应依赖坐标见[本地 Scala 依赖](building.md#本地-scala-依赖)。
-- Dart：纯协议放 polyglot_im；Flutter API 放 polyglot_im_flutter。使用 dart format、推荐 lints，不把 Widgets 或 dart:io 引入纯 Dart 协议层。
-- Python：包名 polyglot_im，四空格缩进，类型注解，Ruff 格式及检查；核心模型/端口无运行时第三方依赖；HTTPX 适配器通过 [http] 可选依赖安装。
+- Scala：包名 `snapflow.im`，两空格缩进，Scala 3；Circe 处理 JSON，Scalafmt 120 列。Scala Client 发布组织标识为 `org.bitlap`，对应依赖坐标见[本地 Scala 依赖](building.md#本地-scala-依赖)。
+- Dart：纯协议放 snapflow_im；Flutter API 放 snapflow_im_flutter。使用 dart format、推荐 lints，不把 Widgets 或 dart:io 引入纯 Dart 协议层。
+- Python：包名 snapflow_im，四空格缩进，类型注解，Ruff 格式及检查；核心模型/端口无运行时第三方依赖；HTTPX 适配器通过 [http] 可选依赖安装。
 - 协议：snake_case 字段；字符串 ID 和序号；payload 支持未知类型回退。
 - 文档：中文、相对链接、仅描述当前能力、使用方式和验收边界，不链接 issue 路线图或规划；复杂流程直接维护 SVG。
 
@@ -23,7 +31,7 @@ just 不安装全局工具链，不是跨语言依赖解析器。Python 使用 u
 
 ## Server 错误与类型命名
 
-业务异常定义位于 [ApiError.scala](../scala-server/src/main/scala/polyglot/im/server/domain/ApiError.scala)：`ApiError.Code` 保存稳定错误码，`ApiError.Message` 保存提示和动态模板，HTTP、鉴权、游标、仓储及启动配置校验只引用定义。HTTP 状态与业务码分别保留，同一码的不同场景不合并提示；不回显输入值、凭据或配置内容。APNs 原生 reason 仍由提供商适配器按第三方协议分类，普通日志和通知文案不属于异常定义。
+业务异常定义位于 [ApiError.scala](../scala-server/src/main/scala/snapflow/im/server/domain/ApiError.scala)：`ApiError.Code` 保存稳定错误码，`ApiError.Message` 保存提示和动态模板，HTTP、鉴权、游标、仓储及启动配置校验只引用定义。HTTP 状态与业务码分别保留，同一码的不同场景不合并提示；不回显输入值、凭据或配置内容。APNs 原生 reason 仍由提供商适配器按第三方协议分类，普通日志和通知文案不属于异常定义。
 
 Server 自有配置类型与文件统一使用 `Settings` 后缀。`AppSettings` 是完成校验的运行设置，组合根通过 `AppSettings.load` 加载；`AppInputSettings` 及 `DatabaseInputSettings`、`ApnsInputSettings`、`RateLimitInputSettings` 是 HOCON 读取值，保留读取后校验的边界。`ServerSettings`、`DatabaseSettings`、`ApnsSettings` 和 `RateLimitSettings` 注入对应服务。第三方 `Config`、`HikariConfig` 等类型保留原名。`just check-names` 检查类型／文件命名及异常字面量。
 
@@ -39,17 +47,17 @@ cp config/server.example.conf config/server.local.conf
 just run-server --config "$PWD/config/server.local.conf"
 ```
 
-配置文件选择优先级为 `--config <路径>` > JVM `-Dconfig.file=<路径>` > `POLYGLOT_IM_CONFIG`。未指定文件时加载 classpath `application.conf`（也可用 `-Dconfig.resource=<名称>` 替换）。`scala-server/src/main/resources/application.conf` 可直接填写部署配置，`reference.conf` 提供公共默认值；包含私钥或部署凭证的文件应在仓库外维护，或使用已忽略的 `*.local.conf`。
+配置文件选择优先级为 `--config <路径>` > JVM `-Dconfig.file=<路径>` > `SNAPFLOW_IM_CONFIG`。未指定文件时加载 classpath `application.conf`（也可用 `-Dconfig.resource=<名称>` 替换）。`scala-server/src/main/resources/application.conf` 可直接填写部署配置，`reference.conf` 提供公共默认值；包含私钥或部署凭证的文件应在仓库外维护，或使用已忽略的 `*.local.conf`。
 
-字段覆盖顺序：JVM `-Dpolyglot-im.*` 属性 > 应用配置文件 > `reference.conf`。支持 HOCON `include`、`${...}` 替换、`${?ENV}` 可选环境引用和时长（如 `3 seconds`）。不会自动加载 `.env`。`just run-server` 会进入 `scala-server`，建议传入绝对配置路径；APNs `key-file` 相对指定配置文件目录解析，无指定文件时相对工作目录。
+字段覆盖顺序：JVM `-Dsnapflow-im.*` 属性 > 应用配置文件 > `reference.conf`。支持 HOCON `include`、`${...}` 替换、`${?ENV}` 可选环境引用和时长（如 `3 seconds`）。不会自动加载 `.env`。`just run-server` 会进入 `scala-server`，建议传入绝对配置路径；APNs `key-file` 相对指定配置文件目录解析，无指定文件时相对工作目录。
 
 例如在 `scala-server` 目录运行：
 
 ```sh
-sbt -Dconfig.file=/absolute/path/server.conf -Dpolyglot-im.server.port=8091 run
+sbt -Dconfig.file=/absolute/path/server.conf -Dsnapflow-im.server.port=8091 run
 ```
 
-以下字段均位于 `polyglot-im` 下。环境变量需要在 HOCON 中通过 `${?ENV}` 显式引用，不再维护旧环境变量到配置字段的隐式映射。
+以下字段均位于 `snapflow-im` 下。环境变量需要在 HOCON 中通过 `${?ENV}` 显式引用，不再维护旧环境变量到配置字段的隐式映射。
 
 | HOCON 字段 | 作用与默认值 |
 | --- | --- |
@@ -60,7 +68,7 @@ sbt -Dconfig.file=/absolute/path/server.conf -Dpolyglot-im.server.port=8091 run
 | database.connection-timeout | 等待连接超时，默认 10 seconds，最小 250ms |
 | database.statement-timeout / lock-timeout | 默认 15 / 3 seconds，均大于 0，锁等待不得超过语句超时 |
 | auth.app-id | 单部署应用命名空间，必填 |
-| auth.issuer | 默认 polyglot-im |
+| auth.issuer | 默认 snapflow-im |
 | auth.user-jwt-secret / service-jwt-secret / cursor-secret | JWT 模式三个不同随机密钥，各至少 32 字节；内省模式仅 service/cursor 必需，拒绝模板占位符 |
 | auth.introspection-url | 可选业务登录校验端点，HTTPS；本地 HTTP 仅限 loopback |
 | apns.enabled / sandbox | 均默认 false；sandbox=true 为开发通道 |
@@ -69,7 +77,7 @@ sbt -Dconfig.file=/absolute/path/server.conf -Dpolyglot-im.server.port=8091 run
 | push.parallelism | 推送并发数，默认 8，范围 1..256 |
 | push.lease-duration / job-timeout / poll-interval | 默认 60 / 20 / 1 seconds，租约比任务超时至少长 5 秒 |
 
-`POLYGLOT_IM_BUSINESS_DATABASE_DSN` 由 Python 宿主显式传入业务 Outbox，服务端不读取此变量。配置解析失败、未知字段、缺失必填项和非法取值会在连接数据库前报错；错误和配置对象打印不输出连接凭证或签名密钥。
+`SNAPFLOW_IM_BUSINESS_DATABASE_DSN` 由 Python 宿主显式传入业务 Outbox，服务端不读取此变量。配置解析失败、未知字段、缺失必填项和非法取值会在连接数据库前报错；错误和配置对象打印不输出连接凭证或签名密钥。
 
 配置模板以 `snapflow` 为数据库名，使用 `jdbc:postgresql://127.0.0.1:5432/snapflow`；Python DSN 使用 `postgresql://user:password@127.0.0.1:5432/snapflow`。主机、端口、登录用户与密码按部署环境配置，数据库 URL 仍须显式提供。Server 表显式使用 `snap_flow.im_xxx`，与 SnapFlow 的 schema 一致；连接指定数据库后初始化 schema 与当前 IM 表，不自动创建数据库，不升级旧表。
 

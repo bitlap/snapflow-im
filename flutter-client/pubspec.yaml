@@ -1,8 +1,8 @@
-name: polyglot_im_flutter
-description: polyglot-im Flutter 生命周期适配基础，面向跨平台消息 Client 的 App 集成。
+name: snapflow_im_flutter
+description: SnapFlow IM Flutter 生命周期适配基础，面向跨平台消息 Client 的 App 集成。
 version: 0.1.1
 publish_to: none
-repository: https://github.com/bitlap/polyglot-im
+repository: https://github.com/bitlap/snapflow-im
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
@@ -12,7 +12,7 @@ dependencies:
   sqflite: ^2.4.2
   flutter:
     sdk: flutter
-  polyglot_im:
+  snapflow_im:
     path: ../dart-client
 
 dev_dependencies:
@@ -25,4 +25,4 @@ flutter:
   plugin:
     platforms:
       ios:
-        pluginClass: PolyglotImPlugin
+        pluginClass: SnapflowImPlugin
