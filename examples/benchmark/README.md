@@ -1,4 +1,4 @@
-# Polyglot IM Benchmark 示例
+# SnapFlow IM Benchmark 示例
 
 在仓库根目录运行：
 

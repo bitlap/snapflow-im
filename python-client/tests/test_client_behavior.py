@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from polyglot_im import ApiClient, HttpResponse, ImClient, ImError, Scope, SqliteCache
+from snapflow_im import ApiClient, HttpResponse, ImClient, ImError, Scope, SqliteCache
 
 
 class Transport:

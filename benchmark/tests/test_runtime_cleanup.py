@@ -32,7 +32,7 @@ def test_permission_denial_only_ignored_after_owned_process_group_has_exited(
         pid = 123
 
         def __init__(self, *args, **kwargs):
-            directory = Path(kwargs["env"]["POLYGLOT_IM_BENCH_DIRECTORY"])
+            directory = Path(kwargs["env"]["SNAPFLOW_IM_BENCH_DIRECTORY"])
             (directory / "config.json").write_text(
                 json.dumps(
                     {

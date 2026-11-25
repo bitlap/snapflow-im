@@ -1,4 +1,4 @@
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 
 /// 资源由宿主创建与关闭；Flutter 可传入 SQLite，测试可传入隔离的替身。
 ImClient createClient({

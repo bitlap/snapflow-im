@@ -1,4 +1,4 @@
-# Polyglot IM Scala Server
+# SnapFlow IM Scala Server
 
 基于 Cats Effect、http4s、HikariCP 与 PostgreSQL 的持久化消息服务，支持业务通知及文字单聊，提供 JWT / 业务会话内省鉴权、幂等发送、历史分页、未读/已读、增量同步、WebSocket、设备注册及 iOS APNs 推送。
 
@@ -23,7 +23,7 @@ cp config/server.example.conf config/server.local.conf
 just run-server --config "$PWD/config/server.local.conf"
 ```
 
-采用 PureConfig 类型化读取，默认加载 classpath `application.conf` 与 `reference.conf` 默认值。也可在本目录执行 `sbt -Dconfig.file=/absolute/path/server.conf run`，或通过 `POLYGLOT_IM_CONFIG` 指定文件。JVM 的 `-Dpolyglot-im.*` 属性优先于应用文件和默认值，环境变量只通过 HOCON 显式引用；不自动加载 `.env`。
+采用 PureConfig 类型化读取，默认加载 classpath `application.conf` 与 `reference.conf` 默认值。也可在本目录执行 `sbt -Dconfig.file=/absolute/path/server.conf run`，或通过 `SNAPFLOW_IM_CONFIG` 指定文件。JVM 的 `-Dsnapflow-im.*` 属性优先于应用文件和默认值，环境变量只通过 HOCON 显式引用；不自动加载 `.env`。
 
 配置包括 HTTP、PostgreSQL 连接池、鉴权、APNs 和限流。非法配置在建立数据库连接前失败，错误不回显密钥。APNs 私钥相对路径以配置文件所在目录解析。配置结构及覆盖规则见[开发与配置](../docs/development.md)。
 
@@ -50,7 +50,7 @@ just test-integration
 just benchmark-smoke
 ```
 
-[演示服务源码](../examples/scala-server/README.md) · [配置与部署](../docs/development.md) · [协议与接口](../docs/protocol.md) · [基准报告](../benchmark/README.md) · [返回 Polyglot IM 项目首页](../README.md)
+[演示服务源码](../examples/scala-server/README.md) · [配置与部署](../docs/development.md) · [协议与接口](../docs/protocol.md) · [基准报告](../benchmark/README.md) · [返回 SnapFlow IM 项目首页](../README.md)
 
 ## 用户单聊
 
@@ -64,10 +64,10 @@ HTTP 使用 `code/message/data` 通用信封，Client 自动解包；服务端�
 
 ```scala
 import cats.effect.{IO, Resource}
-import polyglot.im.server.Main
-import polyglot.im.server.config.AppSettings
-import polyglot.im.server.bootstrap.ServerComponents
-import polyglot.im.server.ports.Authenticator
+import snapflow.im.server.Main
+import snapflow.im.server.config.AppSettings
+import snapflow.im.server.bootstrap.ServerComponents
+import snapflow.im.server.ports.Authenticator
 
 def serve(config: AppSettings, auth: Resource[IO, Authenticator[IO]]) = {
   val components = ServerComponents.postgres[IO](config).copy(authenticator = auth)
@@ -75,7 +75,7 @@ def serve(config: AppSettings, auth: Resource[IO, Authenticator[IO]]) = {
 }
 ```
 
-模块入口与资源关闭见[分层与扩展](../docs/extensibility.md#分层与扩展入口)，装配代码见[示例](../examples/scala-server/src/main/scala/polyglot/im/server/ServerWiring.scala)。
+模块入口与资源关闭见[分层与扩展](../docs/extensibility.md#分层与扩展入口)，装配代码见[示例](../examples/scala-server/src/main/scala/snapflow/im/server/ServerWiring.scala)。
 
 配置类型统一使用`Settings`后缀，加载入口为`AppSettings.load`；错误码和提示统一位于`domain/ApiError.scala`。源码嵌入调用方需使用新类型名，HTTP／WS和HOCON字段保持不变。详见[开发与配置](../docs/development.md#server-错误与类型命名)。
 

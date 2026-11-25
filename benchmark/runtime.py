@@ -66,7 +66,7 @@ def owned_group_alive(group_id: int) -> bool:
 @contextmanager
 def server(args):
     """启动专用临时数据库与独立服务进程；退出或失败时终止整个夹具进程组。"""
-    with tempfile.TemporaryDirectory(prefix="polyglot-im-benchmark-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="snapflow-im-benchmark-") as temporary:
         path = args.serve_only.resolve() if args.serve_only else Path(temporary)
         path.mkdir(parents=True, exist_ok=True, mode=0o700)
         path.chmod(0o700)
@@ -87,7 +87,7 @@ def server(args):
         }
         env = {
             **os.environ,
-            **{f"POLYGLOT_IM_BENCH_{key}": str(value) for key, value in names.items()},
+            **{f"SNAPFLOW_IM_BENCH_{key}": str(value) for key, value in names.items()},
         }
         with (path / "server.log").open("w+") as log:
             process = subprocess.Popen(

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:polyglot_im_example/main.dart';
+import 'package:snapflow_im_example/main.dart';
 import 'package:flutter/material.dart';
 
 void main() {

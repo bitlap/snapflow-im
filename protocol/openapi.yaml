@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Polyglot IM 消息服务
+  title: SnapFlow IM 消息服务
   version: 0.1.1
   description: 业务通知、文字/Unicode 表情单聊与 iOS APNs；WS 为可靠同步通道，APNs 接受不表示已读。 HTTP 成功采用 {code:200,message:success,data}；错误保留
     HTTP 状态，error_code 为业务错误码；WS 帧不额外包装。

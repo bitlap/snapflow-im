@@ -1,4 +1,4 @@
-# Polyglot IM Flutter Client
+# SnapFlow IM Flutter Client
 
 Flutter 消息 Client 的单一入口，导出 Dart 协议与 HTTP/WebSocket 客户端，并提供 SQLite 持久缓存、ImInbox 消息页、生命周期恢复及 iOS APNs 原生绑定。
 
@@ -8,14 +8,14 @@ Flutter 3.44+。工程依赖本地 Client 时使用：
 
 ```yaml
 dependencies:
-  polyglot_im_flutter:
-    path: ../polyglot-im/flutter-client
+  snapflow_im_flutter:
+    path: ../snapflow-im/flutter-client
 ```
 
 在已登录的宿主页面中创建客户端，`baseUrl`、`appId`、`userId` 来自宿主配置，`readUserToken` 返回登录后的用户 Token：
 
 ```dart
-import 'package:polyglot_im_flutter/polyglot_im_flutter.dart';
+import 'package:snapflow_im_flutter/snapflow_im_flutter.dart';
 
 final store = await SqliteCache.openDefault();
 final client = ImClient(
@@ -49,7 +49,7 @@ just example-ios      # 终端二：启动消息中心
 
 测试命令为 `just test-flutter`。
 
-[iOS 示例工程](../examples/flutter-client/README.md) · [返回 Polyglot IM 项目首页](../README.md)
+[iOS 示例工程](../examples/flutter-client/README.md) · [返回 SnapFlow IM 项目首页](../README.md)
 
 ## 用户单聊
 

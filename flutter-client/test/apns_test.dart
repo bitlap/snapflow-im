@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:polyglot_im_flutter/polyglot_im_flutter.dart';
+import 'package:snapflow_im_flutter/snapflow_im_flutter.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  const methods = MethodChannel('polyglot_im/apns');
-  const events = MethodChannel('polyglot_im/apns_events');
+  const methods = MethodChannel('snapflow_im/apns');
+  const events = MethodChannel('snapflow_im/apns_events');
   const scope = AccountScope(
     environment: 'https://im.example',
     appId: 'app',

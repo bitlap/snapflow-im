@@ -1,4 +1,4 @@
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 
 /// iOS 当前通知授权，区分尚未申请与已拒绝，不能用 token 是否存在代替。
 enum IosNotificationAuthorization {

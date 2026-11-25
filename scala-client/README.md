@@ -1,20 +1,20 @@
-# Polyglot IM Scala Client
+# SnapFlow IM Scala Client
 
 Scala 3 / Cats Effect 消息 SDK，支持通知及文字单聊，提供通知发送、HTTP/WebSocket 同步、账户隔离的 SQLite / PostgreSQL 消息缓存与可信后端 PostgreSQL 业务 Outbox。网络、凭证与本地存储通过端口注入，使用 `F[_]`、FS2 和 `Resource` 管理异步操作及资源生命周期。
 
 ## 使用示例
 
-JDK 17+、Scala 3.6.3，本目录提供独立的 sbt 构建，包命名空间为 `polyglot.im`。
+JDK 17+、Scala 3.6.3，本目录提供独立的 sbt 构建，包命名空间为 `snapflow.im`。
 
-发布组织为 `org.bitlap`，本地依赖写作 `"org.bitlap" %% "polyglot-im-scala-client" % "0.1.1"`。在仓库根执行 `just publish-local-scala` 发布到 Ivy local，完整坐标与接入见[构建文档](../docs/building.md#本地-scala-依赖)。
+发布组织为 `org.bitlap`，本地依赖写作 `"org.bitlap" %% "snapflow-im-scala-client" % "0.1.1"`。在仓库根执行 `just publish-local-scala` 发布到 Ivy local，完整坐标与接入见[构建文档](../docs/building.md#本地-scala-依赖)。
 
 ```scala
 import java.net.URI
 import cats.effect.{IO, IOApp}
 import cats.syntax.all.*
 import io.circe.Json
-import polyglot.im.*
-import polyglot.im.transport.*
+import snapflow.im.*
+import snapflow.im.transport.*
 
 object Publish extends IOApp.Simple {
   val run: IO[Unit] =
@@ -41,7 +41,7 @@ object Publish extends IOApp.Simple {
 ```scala
 import java.nio.file.Path
 import cats.effect.IO
-import polyglot.im.SqliteCache
+import snapflow.im.SqliteCache
 
 val store = new SqliteCache[IO](Path.of("/app/data/im.sqlite"))
 // 将 store 传入 ImClient.create；复用相同路径和 scope 可重启恢复。
@@ -62,7 +62,7 @@ sbt test
 sbt package
 ```
 
-[可运行示例](../examples/scala-client/README.md) · [完整集成](../docs/client/scala.md) · [业务事务 Outbox](../docs/integration.md) · [返回 Polyglot IM 项目首页](../README.md)
+[可运行示例](../examples/scala-client/README.md) · [完整集成](../docs/client/scala.md) · [业务事务 Outbox](../docs/integration.md) · [返回 SnapFlow IM 项目首页](../README.md)
 
 ## 用户单聊
 
@@ -74,6 +74,6 @@ HTTP 使用 `code/message/data` 通用信封，Client 自动解包；服务端�
 
 api 提供装配入口，service 编排同步与发送，domain 维护模型与缓存归并；ports 定义 RemoteApi、HttpTransport、SocketConnector、ClientCache、WireCodec 和 NotificationPublisher。具体 JDK、SQLite/PostgreSQL/原子文件缓存与 PostgreSQL Outbox 位于 infrastructure，重试参数位于 config。
 
-默认用法保持兼容。自定义网络、帧或缓存时，将同一 WireCodec 传给网络适配器、ApiClient 和 ImClient.create；资源仍通过 Resource 显式释放。见[装配示例](../examples/scala-client/src/main/scala/polyglot/im/examples/ClientWiring.scala)及[分层契约](../docs/extensibility.md#分层与扩展入口)。
+默认用法保持兼容。自定义网络、帧或缓存时，将同一 WireCodec 传给网络适配器、ApiClient 和 ImClient.create；资源仍通过 Resource 显式释放。见[装配示例](../examples/scala-client/src/main/scala/snapflow/im/examples/ClientWiring.scala)及[分层契约](../docs/extensibility.md#分层与扩展入口)。
 
 单聊控制接口包括接收权限、拉黑、免打扰、置顶、隐藏、个人删除、撤回与在线租约；需服务端启用可信关系目录，宿主负责页面和前台心跳。具体权限、缓存及协议边界见[单聊说明](../docs/direct-chat.md)。

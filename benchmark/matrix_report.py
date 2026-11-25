@@ -684,7 +684,7 @@ def render_matrix(index_path: Path, readme: Path) -> str:
         "",
         "本基准 HTTPX timeout=30 分别约束连接、读取、写入和取连接等阶段，并非整请求总时限；成功请求的总耗时可以超过 30 秒，不能把这类长尾改记为零或丢弃。[HTTPX 超时说明](https://www.python-httpx.org/advanced/timeouts/)。",
         "",
-        f"服务端对同一生产者的配额记录执行原子更新，对接收者的顺序/游标状态使用行锁；它们是写入争用的候选路径。读取请求也经过全局限流，仍有配额更新和 WAL。源码约束不等于本次锁对象已定位。[测量版本 PostgresStore](https://github.com/bitlap/polyglot-im/blob/{revision}/scala-server/src/main/scala/polyglot/im/server/infrastructure/postgres/PostgresStore.scala)。",
+        f"服务端对同一生产者的配额记录执行原子更新，对接收者的顺序/游标状态使用行锁；它们是写入争用的候选路径。读取请求也经过全局限流，仍有配额更新和 WAL。源码约束不等于本次锁对象已定位。[测量版本 PostgresStore](https://github.com/bitlap/snapflow-im/blob/{revision}/scala-server/src/main/scala/polyglot/im/server/infrastructure/postgres/PostgresStore.scala)。",
         "",
         "### 仍无法由本次结果确定的事项",
         "",

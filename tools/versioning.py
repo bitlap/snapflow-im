@@ -6,7 +6,7 @@ import tomllib
 from pathlib import Path
 
 MODULES = {
-    "polyglot-im": ".",
+    "snapflow-im": ".",
     "scala-client": "scala-client",
     "scala-server": "scala-server",
     "dart-client": "dart-client",
@@ -16,8 +16,8 @@ MODULES = {
     "uniapp-client": "uniapp-client",
 }
 DART_PACKAGES = {
-    "dart-client": "polyglot_im",
-    "flutter-client": "polyglot_im_flutter",
+    "dart-client": "snapflow_im",
+    "flutter-client": "snapflow_im_flutter",
 }
 VERSION_PATTERN = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)")
 
@@ -59,16 +59,16 @@ def index_content(version: str, versions: list[str]) -> str:
         "此索引由 `just set-version <版本号>` 更新，保留全部历史版本。\n\n"
         "| 版本记录 |\n| --- |\n"
         f"{rows}\n\n"
-        "[返回 Polyglot IM 项目首页](../README.md)\n"
+        "[返回 SnapFlow IM 项目首页](../README.md)\n"
     )
 
 
 def release_template(version: str) -> str:
     sections = "\n\n".join(
-        f"## {'项目与构建' if module == 'polyglot-im' else module}\n\n- 待补充本版本变更。"
+        f"## {'项目与构建' if module == 'snapflow-im' else module}\n\n- 待补充本版本变更。"
         for module in MODULES
     )
-    return f"# Polyglot IM {version}\n\n{sections}\n"
+    return f"# SnapFlow IM {version}\n\n{sections}\n"
 
 
 def check_versions(root: Path) -> None:
@@ -88,7 +88,7 @@ def check_versions(root: Path) -> None:
         match = re.search(r"^version: (.+)$", text, re.MULTILINE)
         if not match or match[1] != version:
             raise ValueError(f"{name} 版本与 VERSION 不一致")
-    podspec = root / "flutter-client/ios/polyglot_im_flutter.podspec"
+    podspec = root / "flutter-client/ios/snapflow_im_flutter.podspec"
     if podspec.exists() and f"s.version = '{version}'" not in podspec.read_text():
         raise ValueError("iOS podspec 版本与 VERSION 不一致")
     for module in ("dart-client", "flutter-client"):
@@ -114,14 +114,14 @@ def check_versions(root: Path) -> None:
     if not re.search(rf"^  version: {re.escape(version)}$", api, re.MULTILINE):
         raise ValueError("OpenAPI 服务版本与 VERSION 不一致")
     lock = tomllib.loads((root / "python-client/uv.lock").read_text())
-    package = next((p for p in lock["package"] if p["name"] == "polyglot-im"), None)
+    package = next((p for p in lock["package"] if p["name"] == "snapflow-im"), None)
     if package is None:
         raise ValueError("Python 锁文件缺少当前项目")
     if package["version"] != version:
         raise ValueError("Python 锁文件版本不一致，请执行 just set-version")
     flutter_lock = (root / "flutter-client/pubspec.lock").read_text()
     match = re.search(
-        r'^  polyglot_im:\n(?:(?!^  \S)[\s\S])*?^    version: "([^"]+)"',
+        r'^  snapflow_im:\n(?:(?!^  \S)[\s\S])*?^    version: "([^"]+)"',
         flutter_lock,
         re.MULTILINE,
     )

@@ -2,6 +2,10 @@
 
 提供 PostgreSQL + HTTP/WS + 可选 APNs 的可运行实现；上线前需按目标负载验证容量、备份恢复、TLS、机密管理和告警。仓库未提供容量或合规认证承诺。
 
+## 完整更名的部署边界
+
+当前源码、SDK 和配置前缀已统一为 `snapflow-im`，接入改动见[开发与配置](development.md#完整更名与接入边界)。本次未部署；下方有日期的历史记录保留当时类路径、签发者和版本。升级时显式更新所有实例配置和服务凭证，不能直接套用历史启动入口。
+
 ## 部署与身份
 
 配置见 [HOCON 模板](../config/server.example.conf)。数据库需预先创建，应用启动初始化当前 snap_flow.im_xxx 表结构并校验必要签名配置。使用数据库最小权限账户，备份数据库/签名配置并保护权限；不把真实连接串、.p8、JWT 或 device token 提交仓库。
@@ -12,7 +16,7 @@
 
 ## APNs
 
-APNs 使用 HTTP/2 与 ES256 provider JWT 认证。设置 `polyglot-im.apns.enabled=true`，并配置 team-id、key-id、topic、PKCS8 .p8 的 key-file 路径与 sandbox 标志；环境变量仅在 HOCON 显式引用后生效。开发/发布 token 与 endpoint/topic 匹配。默认关闭锁屏正文 preview，静音按设备持久化。token 轮换重新注册时保留已有静音/预览偏好。退出先解绑。仅 `410 / Unregistered` 条件清除本次投递使用的 token，不误清已轮换的新 token；`BadDeviceToken` 和 `DeviceTokenNotForTopic` 保留注册记录，核对设备实际安装版本、签名环境和 topic 后处理。
+APNs 使用 HTTP/2 与 ES256 provider JWT 认证。设置 `snapflow-im.apns.enabled=true`，并配置 team-id、key-id、topic、PKCS8 .p8 的 key-file 路径与 sandbox 标志；环境变量仅在 HOCON 显式引用后生效。开发/发布 token 与 endpoint/topic 匹配。默认关闭锁屏正文 preview，静音按设备持久化。token 轮换重新注册时保留已有静音/预览偏好。退出先解绑。仅 `410 / Unregistered` 条件清除本次投递使用的 token，不误清已轮换的新 token；`BadDeviceToken` 和 `DeviceTokenNotForTopic` 保留注册记录，核对设备实际安装版本、签名环境和 topic 后处理。
 
 Worker 每秒最多领取自身并发数（默认 8）的任务并行执行，延迟 3 秒允许站内阅读抑制，租约 60 秒、单任务超时 20 秒、APNs 请求超时 10 秒、最多领取 10 次。中断后租约过期接管，完成回写和 token 清理均验证领取标识，拒绝过期 Worker 写回。监控 im_outbox 的 pending/dead 数量、最早 next_at、attempts/error；dead 修复配置后人工重置为 pending，清零 attempts/lease_until、清除 lease_token 并设置 next_at，保留原 message_id。`429`、`5xx`、网络故障按预算重试；`403 / ExpiredProviderToken` 清除本次过期签名缓存后重试，其余明确拒绝立即进入 dead，保留错误原因。耗尽预算保留最后一次错误。`done` 表示本次被 APNs 接受或投递前已无合适目标，两者分别记录 `APNs accepted` 与 `skipped: no eligible push target`，均不代表设备送达。
 
@@ -57,7 +61,7 @@ PR 云端六类检查通过，最终源码干净编译及运行类路径打包�
 
 切换后服务active、NRestarts=0，就绪检查成功；私有业务配置、IM配置、鉴权与APNs私钥摘要均保持不变。调用方基线和接口边界见[集成说明](integration.md#存储与派发的职责)：Scala/Python可使用Outbox端口与独立派发器，Dart/Flutter仅接收通知和提供用户消息能力；SnapFlow继续使用自身doobie通知Worker。公共包注册表没有上传，App与小程序继续使用固定源码本地依赖。
 
-文档检查覆盖70份Markdown及本地链接、YAML、消息Schema和OpenAPI。完整本地验证见[分层验证记录](verification.md)；生产就绪不等于真实设备收到APNs。跟踪[本仓库#59](https://github.com/bitlap/polyglot-im/issues/59)、[App发布#115](https://github.com/bitlap/sf-app/issues/115)和[后端SDK接入#126](https://github.com/bitlap/snapflow/pull/126)。
+文档检查覆盖70份Markdown及本地链接、YAML、消息Schema和OpenAPI。完整本地验证见[分层验证记录](verification.md)；生产就绪不等于真实设备收到APNs。跟踪[本仓库#59](https://github.com/bitlap/snapflow-im/issues/59)、[App发布#115](https://github.com/bitlap/sf-app/issues/115)和[后端SDK接入#126](https://github.com/bitlap/snapflow/pull/126)。
 
 ## 2026-11-20 单聊控制上线
 

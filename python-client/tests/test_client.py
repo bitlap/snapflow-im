@@ -1,6 +1,6 @@
 import asyncio
 
-from polyglot_im.client import Scope, SqliteCache, apply_page, empty_cache
+from snapflow_im.client import Scope, SqliteCache, apply_page, empty_cache
 
 
 def test_page_monotonic_and_duplicate():
@@ -61,7 +61,7 @@ def test_gateway_html_is_retried_but_permission_error_is_not():
 
 
 async def _gateway_retry():
-    from polyglot_im import ApiClient, HttpResponse, ImError
+    from snapflow_im import ApiClient, HttpResponse, ImError
 
     class Transport:
         calls = 0
@@ -93,7 +93,7 @@ def test_sqlite_connections_close_after_success_and_rollback(tmp_path, monkeypat
 
     import pytest
 
-    from polyglot_im.adapters.cache import sqlite_cache as adapter
+    from snapflow_im.adapters.cache import sqlite_cache as adapter
 
     connect = sqlite3.connect
     connections = []

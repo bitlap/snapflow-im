@@ -3,9 +3,9 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
-name = "polyglot-im"
+name = "snapflow-im"
 version = "0.1.1"
-description = "polyglot-im 跨平台消息协议与 Python Client 基础"
+description = "SnapFlow IM 跨平台消息协议与 Python Client 基础"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
@@ -17,13 +17,13 @@ postgres = ["psycopg[binary]>=3.2,<4", "psycopg-pool>=3.2,<4"]
 http = ["httpx>=0.27,<1", "websockets>=14,<16"]
 
 [project.urls]
-Repository = "https://github.com/bitlap/polyglot-im"
+Repository = "https://github.com/bitlap/snapflow-im"
 
 [dependency-groups]
 dev = ["psycopg[binary]>=3.2,<4", "psycopg-pool>=3.2,<4", "websockets>=14,<16", "httpx>=0.27,<1", "pytest>=8,<10", "ruff>=0.11,<1", "jsonschema>=4.23,<5", "PyYAML>=6,<7", "openapi-spec-validator>=0.7,<0.8"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/polyglot_im"]
+packages = ["src/snapflow_im"]
 
 [tool.ruff]
 target-version = "py311"

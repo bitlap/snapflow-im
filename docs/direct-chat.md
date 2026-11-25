@@ -91,7 +91,7 @@ flutter run -d <bob-device> --dart-define-from-file=../../.local-demo/flutter-bo
 
 ## 单聊控制与在线隐私
 
-配置 `polyglot-im.direct-chat.enabled=true`，以及固定 HTTPS `directory-url`。仅本机联调允许 HTTP 环回地址。业务目录接收 `POST {user_ids:[...]}`，携带当前用户 Bearer，返回 `data={active:true,app_id,user_id,items:[{user_id,exists,following,follows_you}]}`。following 表示请求者关注对方，follows_you 表示对方关注请求者。目录必须从凭证识别请求者；IM 不缓存授权结果，不记录凭证，不跟随重定向，单批最多50人、响应最多64KiB、超时5秒。
+配置 `snapflow-im.direct-chat.enabled=true`，以及固定 HTTPS `directory-url`。仅本机联调允许 HTTP 环回地址。业务目录接收 `POST {user_ids:[...]}`，携带当前用户 Bearer，返回 `data={active:true,app_id,user_id,items:[{user_id,exists,following,follows_you}]}`。following 表示请求者关注对方，follows_you 表示对方关注请求者。目录必须从凭证识别请求者；IM 不缓存授权结果，不记录凭证，不跟随重定向，单批最多50人、响应最多64KiB、超时5秒。
 
 默认接收权限为互相关注 `mutual`；可改为所有人 `all` 或本人关注的人 `following`。创建和每次发送（含幂等重试）均复核权限；已有会话不绕过接收权限。任一方拉黑均阻止双向发送，不清空历史。免打扰仅关闭该用户的新私信系统推送，站内未读仍计数。已排队的推送在派发前再次核对拉黑、免打扰、删除和撤回状态；已交给APNs的通知无法撤回。
 

@@ -42,9 +42,9 @@ DART_DRIVERS = (
     "package:flutter/services.dart",
 )
 SOURCES = {
-    "python-client": "src/polyglot_im",
-    "scala-client": "src/main/scala/polyglot/im",
-    "scala-server": "src/main/scala/polyglot/im/server",
+    "python-client": "src/snapflow_im",
+    "scala-client": "src/main/scala/snapflow/im",
+    "scala-server": "src/main/scala/snapflow/im/server",
     "dart-client": "lib/src",
     "flutter-client": "lib/src",
     "uniapp-client": "src",
@@ -60,7 +60,7 @@ def violations(source: Path, base: Path) -> list[str]:
     imports = []
     dependencies = []
     if source.suffix == ".py":
-        package = ["polyglot_im", *relative.parts[:-1]]
+        package = ["snapflow_im", *relative.parts[:-1]]
         for node in ast.walk(ast.parse(text)):
             if isinstance(node, ast.Import):
                 imports.extend(alias.name for alias in node.names)
@@ -72,19 +72,19 @@ def violations(source: Path, base: Path) -> list[str]:
                     if node.level
                     else name.split(".")
                 )
-                if resolved[0] == "polyglot_im":
+                if resolved[0] == "snapflow_im":
                     dependencies.append(
                         resolved[1] if len(resolved) > 1 else "public-facade"
                     )
         for name in imports:
-            if name.split(".")[0] == "polyglot_im":
+            if name.split(".")[0] == "snapflow_im":
                 dependencies.append(
                     name.split(".")[1] if "." in name else "public-facade"
                 )
         drivers = [name for name in imports if name.split(".")[0] in PYTHON_DRIVERS]
     elif source.suffix == ".scala":
         # Also match fully qualified constructor references, which can bypass imports.
-        prefix = "polyglot.im.server" if base.name == "server" else "polyglot.im"
+        prefix = "snapflow.im.server" if base.name == "server" else "snapflow.im"
         dependencies = re.findall(re.escape(prefix) + r"\.(\w+)", text)
         if re.search(r"import\s+" + re.escape(prefix) + r"\.(?:\{|\*)", text):
             dependencies.append("public-facade")

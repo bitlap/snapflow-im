@@ -4,9 +4,9 @@ ThisBuild / publish / skip := true
 lazy val root = (project in file("."))
   .dependsOn(RootProject(file("../../scala-client")))
   .settings(
-    name                 := "polyglot-im-scala-client-example",
+    name                 := "snapflow-im-scala-client-example",
     scalafmtConfig       := baseDirectory.value / ".scalafmt.conf",
-    Compile / mainClass  := Some("polyglot.im.examples.LiveClient"),
+    Compile / mainClass  := Some("snapflow.im.examples.LiveClient"),
     Compile / run / fork := true,
-    Compile / run / javaOptions += "-Dpolyglot.im.root=" + baseDirectory.value.getParentFile.getParentFile.getAbsolutePath
+    Compile / run / javaOptions += "-Dsnapflow.im.root=" + baseDirectory.value.getParentFile.getParentFile.getAbsolutePath
   )

@@ -1,4 +1,4 @@
-# Polyglot IM 示例
+# SnapFlow IM 示例
 
 每个子项目在本目录维护一个独立文件夹；先在仓库根目录执行 `just setup`。
 

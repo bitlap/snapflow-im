@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from polyglot_im import ApiClient, HttpResponse, ImError
+from snapflow_im import ApiClient, HttpResponse, ImError
 
 FIXTURES = Path(__file__).resolve().parents[2] / "protocol/fixtures"
 

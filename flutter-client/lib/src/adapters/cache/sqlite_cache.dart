@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// 消息与游标在同一 SQLite 事务提交；数据库生命周期由宿主显式管理。

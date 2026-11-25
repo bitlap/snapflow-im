@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 
 /// 单聊列表；从服务器分页补齐快照以外的会话。
 class ImConversations extends StatefulWidget {

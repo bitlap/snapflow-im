@@ -4,11 +4,11 @@
 
 | 平台 | 分发包名 | 导入入口 |
 | --- | --- | --- |
-| Python | polyglot-im | polyglot_im |
-| Dart | polyglot_im | package:polyglot_im/polyglot_im.dart |
-| Flutter | polyglot_im_flutter | package:polyglot_im_flutter/polyglot_im_flutter.dart |
-| uni-app / npm | @bitlap/polyglot-im | @bitlap/polyglot-im |
-| Scala / Maven | org.bitlap:polyglot-im-scala-client_3 | polyglot.im |
+| Python | snapflow-im | snapflow_im |
+| Dart | snapflow_im | package:snapflow_im/snapflow_im.dart |
+| Flutter | snapflow_im_flutter | package:snapflow_im_flutter/snapflow_im_flutter.dart |
+| uni-app / npm | @bitlap/snapflow-im | @bitlap/snapflow-im |
+| Scala / Maven | org.bitlap:snapflow-im-scala-client_3 | snapflow.im |
 
 仓库目录和模块 ID 保留各端的开发名称。以上名称已用于本地依赖与产物；公共注册表发布仍须显式配置，不将本地打包视为公开上架。
 

@@ -6,7 +6,7 @@ import { pathToFileURL } from "node:url";
 const configPath = process.argv[2] || ".local-demo/config.json";
 const config = JSON.parse(await fs.readFile(configPath, "utf8"));
 const entry =
-  process.env.POLYGLOT_IM_UNIAPP_ENTRY ||
+  process.env.SNAPFLOW_IM_UNIAPP_ENTRY ||
   path.resolve("uniapp-client/index.js");
 const { ImClient, HttpApi, NotificationSender, emptyCache } = await import(
   pathToFileURL(entry)

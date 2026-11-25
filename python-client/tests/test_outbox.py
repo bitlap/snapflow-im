@@ -8,7 +8,7 @@ import pytest
 from psycopg import sql
 from psycopg_pool import AsyncConnectionPool
 
-from polyglot_im import (
+from snapflow_im import (
     ImError,
     NotificationIntent,
     OutboxClaim,

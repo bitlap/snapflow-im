@@ -18,10 +18,10 @@ from check_names import violations as name_violations  # noqa: E402
         ("service/platform.js", "uni.request({})\n"),
         ("service/client.py", "from ..adapters.httpx import HttpxTransport\n"),
         ("ports/store.py", "import sqlite3\n"),
-        ("service/Client.scala", "package polyglot.im.service\nimport java.net.http.HttpClient\n"),
+        ("service/Client.scala", "package snapflow.im.service\nimport java.net.http.HttpClient\n"),
         (
             "domain/Model.scala",
-            "package polyglot.im.domain\nimport polyglot.im.infrastructure.codec.JsonWireCodec\n",
+            "package snapflow.im.domain\nimport snapflow.im.infrastructure.codec.JsonWireCodec\n",
         ),
         ("service/client.dart", "import 'package:http/http.dart';\n"),
         ("ports/store.dart", "import '../adapters/sqlite.dart';\n"),

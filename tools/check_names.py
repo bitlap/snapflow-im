@@ -61,9 +61,9 @@ def check(root: Path = ROOT) -> None:
                 )
                 if source.suffix == ".scala":
                     prefix = (
-                        "polyglot.im.server"
+                        "snapflow.im.server"
                         if module == "scala-server"
-                        else "polyglot.im"
+                        else "snapflow.im"
                     )
                     expected = ".".join(
                         (prefix, *source.relative_to(base).parent.parts)

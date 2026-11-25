@@ -1,4 +1,4 @@
-# Polyglot IM Dart Client
+# SnapFlow IM Dart Client
 
 纯 Dart HTTP/WebSocket 消息 SDK，面向用户端，支持接收业务通知及文字单聊，提供消息模型、增量同步、历史分页、已读及推送偏好。提供 Dart VM SQLite / PostgreSQL 存储适配；HTTP、凭证和本地存储均可注入，核心不依赖 Flutter。
 
@@ -7,7 +7,7 @@
 Dart 3.12+。宿主提供用户 Token、安装 ID 和实现 `ClientCache` 的缓存：
 
 ```dart
-import 'package:polyglot_im/polyglot_im.dart';
+import 'package:snapflow_im/snapflow_im.dart';
 
 Future<void> syncMessages({
   required String baseUrl,
@@ -41,7 +41,7 @@ Future<void> syncMessages({
 Dart VM 使用独立入口，宿主将存储注入 ImClient 并显式关闭：
 
 ```dart
-import 'package:polyglot_im/sqlite.dart';
+import 'package:snapflow_im/sqlite.dart';
 
 final store = await SqliteCache.open('/app/data/im.sqlite');
 // 将 store 传入 ImClient；客户端停止后 await store.close()。
@@ -51,7 +51,7 @@ final store = await SqliteCache.open('/app/data/im.sqlite');
 
 ## PostgreSQL 消息存储
 
-可信 Dart VM 宿主可导入 `package:polyglot_im/postgres.dart`，使用 `await PostgresCache.open(postgresUrl, namespace: 'desktop-installation')`，或通过构造器借用已有池并显式 initialize。该实现同样注入 ClientCache；消息、会话与游标在作用域锁和同一事务中提交，失败回滚。自有池由 store.close 关闭，借用池由宿主关闭。Flutter 主入口不重导出此适配器；各端能力与资源约定见[客户端存储](../docs/client/storage.md)。
+可信 Dart VM 宿主可导入 `package:snapflow_im/postgres.dart`，使用 `await PostgresCache.open(postgresUrl, namespace: 'desktop-installation')`，或通过构造器借用已有池并显式 initialize。该实现同样注入 ClientCache；消息、会话与游标在作用域锁和同一事务中提交，失败回滚。自有池由 store.close 关闭，借用池由宿主关闭。Flutter 主入口不重导出此适配器；各端能力与资源约定见[客户端存储](../docs/client/storage.md)。
 
 ## 运行例子与测试
 
@@ -62,7 +62,7 @@ cd examples/dart-client
 dart run live.dart
 ```
 
-[真实网络示例](../examples/dart-client/README.md) · [Dart 存储集成](../docs/client/dart.md) · [Flutter 集成](../docs/client/flutter.md) · [返回 Polyglot IM 项目首页](../README.md)
+[真实网络示例](../examples/dart-client/README.md) · [Dart 存储集成](../docs/client/dart.md) · [Flutter 集成](../docs/client/flutter.md) · [返回 SnapFlow IM 项目首页](../README.md)
 
 ## 用户单聊
 

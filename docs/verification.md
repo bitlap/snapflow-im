@@ -2,6 +2,19 @@
 
 各节保留执行时的源码、命名、测试及部署边界，不代表当前全部能力；旧节中的“当前”“未部署”不覆盖后续发布。现有接口、包名及运行状态以[Client总览](client/README.md)、[协议](protocol.md)、包元数据及[运维记录](operations.md)为准；性能结果只适用于报告注明的版本和环境。
 
+## 2026-11-25 项目与 SDK 完整更名
+
+仓库及本地目录统一为 snapflow-im。Scala 命名空间与发布坐标、Python/Dart/Flutter 包及入口、npm 包、iOS 插件、HOCON 根键和环境变量已同步更名；不保留旧名称转发。数据库 SQL、消息字段和 HTTP 路由不变，持久化通知通道与默认 Flutter 缓存数据库文件名保留原值。历史部署及压测证据保留当时名称。升级边界见[开发与配置](development.md#完整更名与接入边界)。
+
+清理 Scala 编译产物后，`just check` 通过 353 项测试：uni-app 34、Python 112、Dart 37、Flutter Client 25、Flutter 示例 1、Scala Client 39、Scala Server 63、benchmark 41、维护工具 1；维护工具另 3 项数据库测试未提供专用环境，显式跳过，不算通过。统一版本、文档／Schema／OpenAPI、分层、命名及各语言格式和静态检查通过。Python 新入口可导入，旧包入口不存在。
+
+`just package` 构建成功；核对 Python wheel 在禁用 site-packages 的隔离解释器中可导入新包，Dart/Flutter 归档入口及许可完整，npm tgz 名称为 @bitlap/snapflow-im，Scala JAR 仅包含新的 snapflow/im 类路径。未上传任何包注册表。
+
+`just build-ios` 使用新 Swift 插件名及 SPM/CocoaPods 元数据成功构建 iOS 模拟器示例；不代表真机 APNs、签名归档或商店发布已验收。业务宿主本地核验：sf-app 静态分析通过、965 项测试通过及 1 项既有跳过；sf-uniapp 使用 Node 22.23.5 完成微信小程序重新编译；snapflow 的 check/headerCheck、6 项通知数据库测试及启用单聊控制的隔离会话端到端验证通过，后者覆盖真实临时 Redis/PostgreSQL、HTTP/WS、通知、已读、撤销和单聊。
+
+本次未部署或修改私有线上配置、凭证、数据库；SDK 注册表发布仍未启用。宿主 CI 必须固定包含完整更名的新 IM 提交，不能使用旧提交搭配新坐标。
+
+
 ## 2026-11-13 Flutter iOS 通知设置与注册恢复
 
 `just check` 全部通过，共 260 项（uni-app 15、Python 84、Dart 31、Flutter Client 13、Flutter 示例 1、Scala Client 30、Scala Server 45、benchmark 41）。新增回归覆盖系统授权/锁屏状态、设置跳转、token 上报失败后重试和撤销授权解绑。随后调整的 Swift API 系统版本判断由宿主 App 的 iOS Release 签名归档验证通过；iOS 16 以下使用 App 设置入口。
@@ -119,7 +132,7 @@ Python 业务 Outbox 替换为异步 PostgreSQL，设备本地 SQLite 缓存保�
 
 复现命令：`just check`、`just package`、`just test-integration`、两个终端的 `just demo-server` / `just test-live`、macOS 下 `just build-ios` / `just test-ios <device-id>`。完整网络示例使用 APNs 关闭的临时 PostgreSQL；退出演示服务删除数据库。
 
-GitHub [核心实现 CI](https://github.com/bitlap/polyglot-im/actions/runs/42973163968) 的 Python、Scala、Flutter、跨语言集成及 macOS iOS 编译五项全部通过。演示服务另验证默认随机端口启动、就绪探针及重启后的 Python/Dart 收发；每次演示数据库使用新的环境命名空间。
+GitHub [核心实现 CI](https://github.com/bitlap/snapflow-im/actions/runs/42973163968) 的 Python、Scala、Flutter、跨语言集成及 macOS iOS 编译五项全部通过。演示服务另验证默认随机端口启动、就绪探针及重启后的 Python/Dart 收发；每次演示数据库使用新的环境命名空间。
 
 ### 外部验收边界
 
@@ -175,7 +188,7 @@ just check 和 just package 通过，共 37 项测试（Python 24、Scala 9、Da
 
 本机实际执行组合命令 `just check package`：check 部分全部通过；初次 Flutter pub dry-run 因本地 path 依赖失败，随后将构建改成明确的私有源码归档，并重新验证构建命令。公共发布前仍须替换 path 依赖，不能把归档成功解释为 pub.dev 预检成功。
 
-仓库首次推送后会触发 [GitHub CI](https://github.com/bitlap/polyglot-im/actions/workflows/ci.yml)，远端结果以实际 run 为准。
+仓库首次推送后会触发 [GitHub CI](https://github.com/bitlap/snapflow-im/actions/workflows/ci.yml)，远端结果以实际 run 为准。
 
 ## 多实例与故障验证
 

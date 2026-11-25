@@ -14,11 +14,11 @@ uv pip install './python-client[http,postgres]'
 
 ```python
 import os
-from polyglot_im import OutboxDispatcher, open_postgres_outbox
+from snapflow_im import OutboxDispatcher, open_postgres_outbox
 
 async def produce_and_drain(task_id, user_id, sender):
     async with open_postgres_outbox(
-        os.environ['POLYGLOT_IM_BUSINESS_DATABASE_DSN'],
+        os.environ['SNAPFLOW_IM_BUSINESS_DATABASE_DSN'],
         min_size=1, max_size=8, timeout=15,
     ) as outbox:
         await outbox.initialize()  # 显式建表，可放在启动初始化中
@@ -67,7 +67,7 @@ val dispatcher = new OutboxDispatcher[IO](outbox, sender, leaseSeconds = 120)
 
 默认支持宿主现有不透明 Bearer，无需 App/小程序更换登录协议或申请额外 IM 用户 JWT。用户鉴权扩展点为 `ports.UserAuthenticator`；独立服务可通过 `JwtAuthenticator` 的 userAuthenticator 注入，嵌入宿主也可替换 `ServerComponents.authenticator`。外部用户实现只能返回当前应用且未过期的 user 身份；IM 清除生产者 types/recipients 范围。生产者继续使用独立服务 JWT，不能拿业务用户会话发系统通知。
 
-HOCON 设置 `polyglot-im.auth.introspection-url` 后启用默认 `HttpSessionAuthenticator`，同时关闭本地用户 JWT；未设置时使用用户 JWT 模式。
+HOCON 设置 `snapflow-im.auth.introspection-url` 后启用默认 `HttpSessionAuthenticator`，同时关闭本地用户 JWT；未设置时使用用户 JWT 模式。
 
 内省固定 GET URL + Authorization: Bearer，不接受客户端指定校验 URL，不跟随重定向，要求 HTTPS（仅 loopback 允许 HTTP），5 秒超时、响应最多 16 KiB。端点返回 200，裸对象或 data 对象必须含 active=true、匹配的 app_id、非空 user_id 和未过期 exp（Unix 秒；兼容 RFC3339 expires_at）。详见 [身份样例](../protocol/fixtures/introspection.json) 和 [Schema](../protocol/introspection.schema.json)。仅含 user_id 的响应无效。
 
@@ -76,7 +76,7 @@ HOCON 设置 `polyglot-im.auth.introspection-url` 后启用默认 `HttpSessionAu
 SnapFlow 的 App `/api/v1/auth/app/login` 和小程序 `/api/v1/mini/login` 都返回 Redis 不透明会话。二者共用 `SessionManager` 的身份命名空间，配置如下（令牌和密钥不写入示例）：
 
 ```hocon
-polyglot-im.auth {
+snapflow-im.auth {
   app-id = "snapflow"
   introspection-url = "https://business.example.com/api/v1/im/identity"
   # 外部会话模式不需要 user-jwt-secret。

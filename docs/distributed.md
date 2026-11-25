@@ -16,10 +16,10 @@
 
 ```sh
 # 终端一（当前目录为 scala-server）
-sbt -Dconfig.file="$PWD/../config/server.local.conf" -Dpolyglot-im.server.port=8090 run
+sbt -Dconfig.file="$PWD/../config/server.local.conf" -Dsnapflow-im.server.port=8090 run
 
 # 终端二（当前目录为 scala-server）
-sbt -Dconfig.file="$PWD/../config/server.local.conf" -Dpolyglot-im.server.port=8091 run
+sbt -Dconfig.file="$PWD/../config/server.local.conf" -Dsnapflow-im.server.port=8091 run
 ```
 
 [nginx.example.conf](../config/nginx.example.conf) 将 HTTP 与 Upgrade 转发到两个端口，提供连接复用、被动故障剔除和超时示例。生产需配置 HTTPS/WSS、readiness 主动检查、连接上限、FD、带宽与重连抖动策略；应用的 HTTP 请求门限不会限制已建立的 WS 连接总数。代理不能记录 Authorization、ticket 查询串或消息正文。不要开启非幂等请求的任意自动重试；发送消息通过稳定 client_message_id 重试。
