@@ -1,3 +1,5 @@
+数据库部署目标为独立的 `snapflow-im`，连接示例见 `config/server.example.conf`。不得复用业务数据库；`snap_flow` 只是 schema 名相同。新建库可由具备权限的运维账号执行 `createdb --owner=<IM角色> snapflow-im`，SQL 标识符写作 `"snapflow-im"`。本次只整理仓库配置与 SQL，不代表已改名或迁移线上数据库；旧库若需改名，应先停止 IM 实例和所有连接、备份并核验，再单独执行数据库改名及配置切换，不能创建空库后直接切流。下文按日期记录保留当时部署事实。
+
 # 安全与运维
 
 提供 PostgreSQL + HTTP/WS + 可选 APNs 的可运行实现；上线前需按目标负载验证容量、备份恢复、TLS、机密管理和告警。仓库未提供容量或合规认证承诺。
@@ -42,7 +44,7 @@ Apple 的后台、权限和强退行为受系统控制，应使用自己的测�
 
 ## 通知操作结构升级
 
-全新数据库使用当前 `db/schema.sql`。已有部署不会自动升级；在首次使用单条已读/删除前，备份数据库并停止所有 IM 写入实例、Push Worker 和生产者，确认 `im_message` 尚无 `is_read/is_deleted/state_version` 且 `im_user_state` 尚无 `notification_unread` 后，由部署者执行 [notification-actions.sql](../scala-server/src/main/resources/db/notification-actions.sql)。脚本单事务加锁、添加字段和索引，并按原 read_seq 回填未读数；仅适用该字段缺失的当前基线，不是通用迁移链。
+全新数据库由初始化事务依次读取当前 `db/DDL/v1.sql` 和 `db/DML/v1.sql`，完成结构后最后写入初始化标记；不要只执行其中一份后启动服务。已有部署不会自动升级；在首次使用单条已读/删除前，备份数据库并停止所有 IM 写入实例、Push Worker 和生产者，确认 `im_message` 尚无 `is_read/is_deleted/state_version` 且 `im_user_state` 尚无 `notification_unread` 后，由部署者执行 [notification-actions.sql](../scala-server/src/main/resources/db/migrations/notification-actions.sql)。脚本单事务加锁、添加字段和索引，并按原 read_seq 回填未读数；仅适用该字段缺失的当前基线，不是通用迁移链。
 
 执行后核对每用户 `notification_unread` 等于未删除、未单条已读且 seq 大于 read_seq 的数量，再启动新服务。所有宿主同时升级 SDK 后启用新操作；保留未升级宿主会产生错误的未读展示。回滚应用前先停用新操作，旧服务不得与新服务混用；数据库回退使用已验证的备份，不能直接丢弃有状态字段。上线后检查单条已读、删除、设备间同步和角标。代码测试不代表已完成生产升级。
 
@@ -90,7 +92,7 @@ IM运行源码仍为bd6af08，本次没有替换IM二进制或重跑墓碑迁移
 
 ## 2026-11-21 已读隐私部署
 
-用户本次单独确认后，备份IM库并显式执行[read-receipts.sql](../scala-server/src/main/resources/db/read-receipts.sql)，未重跑其他脚本。settings 0、会话2、私信50前后一致；备份121531字节，SHA-256 `fdd282567b6ab3dbb33f8a2b8195da7538d98d34da3deeacf5289074e72a9db2`，pg_restore目录清单验证通过，未进行生产数据恢复演练。
+用户本次单独确认后，备份IM库并显式执行[read-receipts.sql](../scala-server/src/main/resources/db/migrations/read-receipts.sql)，未重跑其他脚本。settings 0、会话2、私信50前后一致；备份121531字节，SHA-256 `fdd282567b6ab3dbb33f8a2b8195da7538d98d34da3deeacf5289074e72a9db2`，pg_restore目录清单验证通过，未进行生产数据恢复演练。
 
 运行源码 `0d1909d5104d182a2d4845a23997f09a89bbd6b4`；类路径 `/home/snap/releases/polyglot-im/20261121-0d1909d/im/lib/*`，全部运行文件摘要与正式本机包一致。ready成功、NRestarts=0，私有配置未变。认证GET设置确认read_receipts_visible默认true，未写生产测试偏好或发送测试消息。当前读取接口不代表真机双设备回执已验收。
 

@@ -225,8 +225,10 @@ final class PostgresRepository[F[_]: Async](
       statement.execute("CREATE TABLE IF NOT EXISTS snap_flow.im_schema(version INTEGER PRIMARY KEY CHECK(version=1))")
       val initialized = query(c, "SELECT version FROM snap_flow.im_schema", Nil)(_.getInt(1)).nonEmpty
       if (!initialized) {
-        val sql = scala.util.Using.resource(scala.io.Source.fromResource("db/schema.sql"))(_.mkString)
-        sql.split(";").map(_.trim).filter(_.nonEmpty).foreach(statement.execute)
+        List("DDL", "DML").foreach { side =>
+          val sql = scala.util.Using.resource(scala.io.Source.fromResource(s"db/$side/v1.sql"))(_.mkString)
+          sql.split(";").map(_.trim).filter(_.nonEmpty).foreach(statement.execute)
+        }
       }
       if (directSettingsConfig.enabled && !directSchemaReady(c))
         throw ApiError(503, Code.NotReady, Message.DirectUnavailable)

@@ -1,9 +1,15 @@
+-- 写入表 snap_flow.im_user_state：IM 用户事件及未读水位。
+-- 写入字段 snap_flow.im_user_state.notification_unread：通知未读总数。
 -- 已部署且尚无通知操作字段的数据库：停写、备份并核对结构后执行一次。
 -- 此脚本不会自动在服务启动时执行；重跑会失败并回滚，避免重复回填覆盖当前计数。
 BEGIN;
 LOCK TABLE snap_flow.im_user_state, snap_flow.im_message IN ACCESS EXCLUSIVE MODE;
+-- 字段 notification_unread：通知未读总数。
 -- 用户未读通知计数，首次按旧 read_seq 回填，不能直接用序号差计算。
 ALTER TABLE snap_flow.im_user_state ADD COLUMN notification_unread BIGINT NOT NULL DEFAULT 0 CHECK(notification_unread>=0);
+-- 字段 is_read：个人已读标记。
+-- 字段 is_deleted：个人删除标记。
+-- 字段 state_version：状态递增版本。
 -- 通知个人状态，仅影响接收方展示与推送资格。
 ALTER TABLE snap_flow.im_message
  ADD COLUMN is_read BOOLEAN NOT NULL DEFAULT FALSE, -- 单条已读，与用户 read_seq 共同判定未读

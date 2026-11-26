@@ -81,4 +81,4 @@ def serve(config: AppSettings, auth: Resource[IO, Authenticator[IO]]) = {
 
 ## 账号数据删除
 
-业务服务可通过具有 `account.delete` 类型及目标用户范围的服务身份调用 `DELETE /api/v1/im/accounts/{user}`。事务擦除私有数据并保留不可恢复墓碑；用户端不能直接调用。已有部署先显式执行 `src/main/resources/db/account-deletion.sql`；接口、数据及同步重置边界见[账号注销](../docs/protocol.md#账号注销)。
+业务服务可通过具有 `account.delete` 类型及目标用户范围的服务身份调用 `DELETE /api/v1/im/accounts/{user}`。事务擦除私有数据并保留不可恢复墓碑；用户端不能直接调用。已有部署先显式执行 `src/main/resources/db/migrations/account-deletion.sql`；接口、数据及同步重置边界见[账号注销](../docs/protocol.md#账号注销)。

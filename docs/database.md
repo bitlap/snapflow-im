@@ -4,10 +4,11 @@
 
 ## IM 服务端 PostgreSQL
 
-服务端共15张表，均位于 `snap_flow`。除 `im_schema` 外，完整初始结构及逐字段注释在 [schema.sql](../scala-server/src/main/resources/db/schema.sql)；`im_schema` 及其 `version` 字段的注释在 [PostgresRepository.scala](../scala-server/src/main/scala/snapflow/im/server/infrastructure/postgres/PostgresRepository.scala) 的 `initialize`。
+服务端使用独立 PostgreSQL 数据库 **`snapflow-im`**，与业务库分离；表均位于该库的 `snap_flow` schema。除 `im_schema` 外，完整初始结构及逐字段注释在 [DDL/v1.sql](../scala-server/src/main/resources/db/DDL/v1.sql)，配套 [DML/v1.sql](../scala-server/src/main/resources/db/DML/v1.sql) 最后写入初始化标记；`im_schema` 及其 `version` 字段的注释在 [PostgresRepository.scala](../scala-server/src/main/scala/snapflow/im/server/infrastructure/postgres/PostgresRepository.scala) 的 `initialize`。
 
 | 表 | 职责 |
 | --- | --- |
+| `snap_flow.im_account_tombstone` | 已注销账号最小墓碑，拒绝迟到请求 |
 | `snap_flow.im_schema` | 初始化完成标记，version=1 不是迁移版本号 |
 | `snap_flow.im_user_state` | 用户事件游标、通知水位、通知与单聊未读总数 |
 | `snap_flow.im_message` | 通知消息、发送幂等与个人已读／删除状态 |
@@ -26,14 +27,14 @@
 
 已有数据库的升级单独维护：
 
-- [notification-actions.sql](../scala-server/src/main/resources/db/notification-actions.sql)：通知个人状态、未读计数回填及索引，包含新增字段注释。
-- [direct-controls.sql](../scala-server/src/main/resources/db/direct-controls.sql)：单聊消息状态版本和五张控制表，包含表及字段注释。
+- [notification-actions.sql](../scala-server/src/main/resources/db/migrations/notification-actions.sql)：通知个人状态、未读计数回填及索引，包含新增字段注释。
+- [direct-controls.sql](../scala-server/src/main/resources/db/migrations/direct-controls.sql)：单聊消息状态版本和五张控制表，包含表及字段注释。
 
 脚本不是可任意重跑的通用迁移链。生产启用、停写与备份要求见[运维说明](operations.md)，本页不授权执行迁移。`BIGINT` 序号与时间戳不同，时间单位以字段源码注释为准。
 
 ## Client Cache 与业务 Store
 
-这些表由宿主显式选择和初始化，不属于 IM 服务端15张表。不同实现保留已有表名，不因注释整理而改名或共享缓存格式。
+这些表由宿主显式选择和初始化，不属于 IM 服务端16张表。不同实现保留已有表名，不因注释整理而改名或共享缓存格式。
 
 | 表／用途 | 含表与逐字段注释的源码 |
 | --- | --- |
