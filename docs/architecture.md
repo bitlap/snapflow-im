@@ -49,7 +49,7 @@ IM 框内的实例 A、B 可互换，API、WS、Worker 是各实例内的组件�
 
 全部服务端表、Client Cache 与业务 Outbox 的统一清单及源码入口见[数据表与源码入口](database.md)。表及字段含义直接维护在建表源码注释中。
 
-初始化通过 PostgreSQL advisory lock 串行执行 [schema.sql](../scala-server/src/main/resources/db/schema.sql)，幂等创建当前表结构；已有表保留，不执行旧结构升级。全部 Server 表显式使用 `snap_flow.im_xxx`，不依赖 `search_path`，已有部署只按[运维说明](operations.md)显式执行适用的升级脚本，不自动迁移历史数据。生产启动时缺少数据库/签名配置直接失败。就绪探针检查数据库和 schema；存活探针只说明进程响应。
+初始化通过 PostgreSQL advisory lock，在同一事务内依次执行 [DDL/v1.sql](../scala-server/src/main/resources/db/DDL/v1.sql) 和 [DML/v1.sql](../scala-server/src/main/resources/db/DML/v1.sql)，结构成功后才写入完成标记；已有表保留，不执行旧结构升级。全部 Server 表显式使用 `snap_flow.im_xxx`，不依赖 `search_path`，已有部署只按[运维说明](operations.md)显式执行适用的升级脚本，不自动迁移历史数据。生产启动时缺少数据库/签名配置直接失败。就绪探针检查数据库和 schema；存活探针只说明进程响应。
 
 ## 读取和同步
 

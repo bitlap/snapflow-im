@@ -79,7 +79,7 @@ sbt -Dconfig.file=/absolute/path/server.conf -Dsnapflow-im.server.port=8091 run
 
 `SNAPFLOW_IM_BUSINESS_DATABASE_DSN` 由 Python 宿主显式传入业务 Outbox，服务端不读取此变量。配置解析失败、未知字段、缺失必填项和非法取值会在连接数据库前报错；错误和配置对象打印不输出连接凭证或签名密钥。
 
-配置模板以 `snapflow` 为数据库名，使用 `jdbc:postgresql://127.0.0.1:5432/snapflow`；Python DSN 使用 `postgresql://user:password@127.0.0.1:5432/snapflow`。主机、端口、登录用户与密码按部署环境配置，数据库 URL 仍须显式提供。Server 表显式使用 `snap_flow.im_xxx`，与 SnapFlow 的 schema 一致；连接指定数据库后初始化 schema 与当前 IM 表，不自动创建数据库，不升级旧表。
+配置模板以 `snapflow-im` 为独立数据库名，使用 `jdbc:postgresql://127.0.0.1:5432/snapflow-im`；Python DSN 使用 `postgresql://user:password@127.0.0.1:5432/snapflow-im`。主机、端口、登录用户与密码按部署环境配置，数据库 URL 仍须显式提供。Server 表显式使用 `snap_flow.im_xxx`，schema 名与业务库相同，但数据库物理隔离，严禁指向业务数据库；连接指定数据库后初始化 schema 与当前 IM 表，不自动创建数据库，不升级旧表。
 
 服务端仅接受 PostgreSQL JDBC URL，TLS 等驱动选项可放在 URL 查询参数中。Python 业务数据库使用 PostgreSQL DSN，设备本地离线缓存保留 SQLite；数据库凭证不进入移动 App。缺少必要数据库/签名配置或池参数非法时启动失败。只做本地演示时用 `just demo-server`，临时 PostgreSQL 与随机密钥不依赖 Docker；只绑定 loopback 随机端口，退出后数据库删除。重启后重新读取生成的配置、重建客户端；不要继续使用上次编译的演示地址。配置写入 .local-demo，不能用作生产环境。开启 APNs 的正式服务用 `just run-server`。
 
@@ -135,3 +135,15 @@ Dart／Flutter 不提供服务身份通知发布器与业务 Outbox。Scala/Pyth
 ## 数据库源码注释
 
 新增或修改建表、加字段代码时，在对应 SQL／宿主语言源码中说明表用途、每个字段含义及必要的时间单位、状态值、隔离键和边界。同一字段在初始化与适用升级脚本中的说明保持一致；数据库表清单维护在[数据表与源码入口](database.md)。不以文档表格代替代码注释，不因补充注释增加数据库元数据写入或结构变化。
+
+## SQL 规范
+
+SQL 只允许普通 DDL、DML；禁止持久化自定义函数、触发器（普通、约束、事件及动态创建）和存储过程，也禁止运行代码安装这些对象。数据库自动维护外键等约束的内部触发器保留。业务校验、审核、通知和状态同步由应用代码在业务事务内完成。
+
+唯一例外是单独 `migrations/` 目录内显式执行的一次性脚本：必须说明目标基线、用途、执行顺序和清理范围；临时自定义对象须在同一脚本中删除，不能成为服务依赖。旧触发器定义仅允许位于隔离升级测试的 `src/test/resources/migrations/legacy-triggers/`，临时整库在测试结束销毁，禁止作为生产迁移使用。当前应用行为必须在没有自定义触发器的库中验证。
+
+结构文件放 `DDL/<版本>.sql`，数据文件放 `DML/<版本>.sql`；同一 PR 必须使用相同版本并同步更新两边，没有变更的一边保留明确的源码说明。一次性迁移与 DDL/DML 分开存放，不混入启动流程。每张表、每个定义或新增字段必须有说明业务含义、状态或单位的 `--`／`/* */` 源码注释，禁止 `COMMENT ON` 及数据库元数据注释。数据脚本说明写入目的和字段语义。
+
+服务端初始化仅按顺序读取 `db/DDL/v1.sql`、`db/DML/v1.sql`；v1 是当前初始结构，不是旧部署升级链。已有实例升级仍由运维显式执行 `db/migrations/` 内适用脚本，不在启动时升级。执行 `just check-sql` 检查 SQL 规范，已纳入 `just check`。
+
+SQL 检查在 PR CI 中比较 PR 基线与完整变更；本地可设置 `SQL_POLICY_BASE=<基线提交>` 检查整条分支，不设置时检查当前工作区。CI 必须检出完整历史以获得 PR 基线。

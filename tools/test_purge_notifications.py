@@ -33,12 +33,13 @@ def database():
         )
         c.execute("DROP SCHEMA IF EXISTS snap_flow CASCADE; CREATE SCHEMA snap_flow")
         schema = (
-            Path(__file__).parents[1] / "scala-server/src/main/resources/db/schema.sql"
+            Path(__file__).parents[1] / "scala-server/src/main/resources/db/DDL/v1.sql"
         )
         c.execute(
             "CREATE TABLE snap_flow.im_schema(version INTEGER PRIMARY KEY CHECK(version=1))"
         )
         c.execute(schema.read_text())
+        c.execute((schema.parent.parent / "DML/v1.sql").read_text())
         c.execute(
             "INSERT INTO snap_flow.im_user_state(app_id,user_id,cursor,message_seq,notification_unread) "
             "VALUES('app','user',3,3,2)"

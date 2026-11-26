@@ -121,7 +121,7 @@ flutter run -d <bob-device> --dart-define-from-file=../../.local-demo/flutter-bo
 
 ## 现有部署启用
 
-首次初始化包含控制表。已有数据库需由运维明确执行 [direct-controls.sql](../scala-server/src/main/resources/db/direct-controls.sql) 并核对结构，再配置业务目录、开启控制、部署各客户端；不自动变更已有结构。启用会写入持久激活标记，之后禁止关闭控制以绕过权限。回滚须保留权限校验能力。扩展不提供编辑、输入状态、媒体私信或群聊。
+首次初始化包含控制表。已有数据库需由运维明确执行 [direct-controls.sql](../scala-server/src/main/resources/db/migrations/direct-controls.sql) 并核对结构，再配置业务目录、开启控制、部署各客户端；不自动变更已有结构。启用会写入持久激活标记，之后禁止关闭控制以绕过权限。回滚须保留权限校验能力。扩展不提供编辑、输入状态、媒体私信或群聊。
 
 ### 已读状态隐私
 
@@ -129,4 +129,4 @@ flutter run -d <bob-device> --dart-define-from-file=../../.local-demo/flutter-bo
 
 关闭后仍记录本人实际阅读水位，正常清除未读和角标；对方收到的会话 `peer_read_visible=false`、`peer_read_seq="0"`。历史、快照及保留事件重放均按当前隐私过滤。变更为已有会话生成更高版本事件，在线客户端同步后移除旧回执；已经被对方看过的信息无法收回，离线缓存需重新同步后更新。重新开启公开当前累计已读位置。此开关只控制本人的回执，不影响查看对方主动公开的回执。
 
-已有部署须先备份并显式执行 [read-receipts.sql](../scala-server/src/main/resources/db/read-receipts.sql)，再更新 Server；缺列时 readiness 和启动检查拒绝就绪。回退应用保留新增列及隐私值；旧 Server 不支持该隐私规则，不能在关闭设置仍生效时直接回退旧 Server。新 SDK 对旧 Server 响应缺少 `peer_read_visible` 按原回执语义处理，旧 SDK 仍可通过被过滤为 0 的水位正确隐藏已读。
+已有部署须先备份并显式执行 [read-receipts.sql](../scala-server/src/main/resources/db/migrations/read-receipts.sql)，再更新 Server；缺列时 readiness 和启动检查拒绝就绪。回退应用保留新增列及隐私值；旧 Server 不支持该隐私规则，不能在关闭设置仍生效时直接回退旧 Server。新 SDK 对旧 Server 响应缺少 `peer_read_visible` 按原回执语义处理，旧 SDK 仍可通过被过滤为 0 的水位正确隐藏已读。

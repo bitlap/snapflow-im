@@ -85,7 +85,7 @@ test-scala:
 
 test: test-uniapp test-python test-dart test-flutter test-scala test-benchmark test-maintenance
 
-check: check-versions check-docs check-layers check-names lint test
+check: check-versions check-docs check-layers check-names check-sql lint test
 
 build-scala:
     cd scala-client && sbt compile package
@@ -174,3 +174,7 @@ build-uniapp:
 # 敏感通知维护输入与事务测试；数据库测试需显式配置自有临时库。
 test-maintenance:
     uv run --project python-client --locked pytest tools/test_purge_notifications.py
+
+# 普通 DDL/DML、源码注释、一次性迁移与同 PR 版本配对。
+check-sql:
+    python3 tools/check_sql.py
