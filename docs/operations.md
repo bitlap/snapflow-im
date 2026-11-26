@@ -1,4 +1,4 @@
-数据库部署目标为独立的 `snapflow-im`，连接示例见 `config/server.example.conf`。不得复用业务数据库；`snap_flow` 只是 schema 名相同。新建库可由具备权限的运维账号执行 `createdb --owner=<IM角色> snapflow-im`，SQL 标识符写作 `"snapflow-im"`。本次只整理仓库配置与 SQL，不代表已改名或迁移线上数据库；旧库若需改名，应先停止 IM 实例和所有连接、备份并核验，再单独执行数据库改名及配置切换，不能创建空库后直接切流。下文按日期记录保留当时部署事实。
+数据库部署目标为独立的 `snapflow-im`，连接示例见 `config/server.example.conf`。不得复用业务数据库；`snap_flow` 只是 schema 名相同。新建库可由具备权限的运维账号执行 `createdb --owner=<IM角色> snapflow-im`，SQL 标识符写作 `"snapflow-im"`。2026-11-26 已在停写与备份后将原有库保留数据改名，详见本页末节；未来已有库需要改名时，应先停止 IM 实例和所有连接、备份并核验，再单独执行数据库改名及配置切换，不能创建空库后直接切流。下文按日期记录保留当时部署事实。
 
 # 安全与运维
 
@@ -108,3 +108,14 @@ PostgreSQL LISTEN/NOTIFY 通道改为 `snapflow_im_changes`，部署后核对有
 切换前备份业务库与独立 IM 库、旧配置及 systemd 单元，存于服务器受限目录 `/home/snap/deploy-backups/im-rename-20261125-build62/backup/`。业务库备份 7,550,971 字节，SHA-256 `59f4e10dec4512168a4c8e87bd7aca0e2cc87baff8b62ed9f21ace833f6eca48`；IM 库备份 124,680 字节，SHA-256 `e97894d451aec244c05684ae3364a7f821eb48e4c4f838a7928869ba68c29c07`。pg_restore 目录清单校验通过，未执行恢复演练。服务切换脚本在启动或健康检查失败时恢复旧配置和二进制，不回滚业务数据。
 
 本次完整 just check 通过 353 项、另 3 项维护工具专用数据库测试因环境未配置而跳过；真实 PostgreSQL 跨连接通知、重连与补拉测试通过。PR 最新六类云端 CI 全部通过；部署包摘要与 IM 运行文件清单已核验。配套业务运行源码 `eb2d9ea9d0cd8209709e5d303db2e8586979197f`；App 和小程序发布以各自记录为准。
+
+
+## 2026-11-26 SQL 规范与独立数据库上线
+
+[PR #79](https://github.com/bitlap/snapflow-im/pull/79) 已合并，生产源码 merge commit 为 `b6cd3f68b3c661ba5e6368f9ff9bedf62323806e`，验证源码 `4d3d812`，两者代码树一致。版本仍为 0.1.1，类路径更新至 `/home/snap/releases/snapflow-im/sql-workflows-20261126-4d3d812/im/lib/*`。运行归档 47,971,055 字节，SHA-256 `dcd3ee0177a9c1eb3ded3be92e0b9544c3277986b3cd5a95bef97b500c08782f`。
+
+停写并备份后，将既有 `polyglot_im` 数据库改名为 **`snapflow-im`**，仅修改私有 HOCON 数据库 URL；数据库角色仍为原身份，保留 OID、schema、权限、16 张表和消息数据。不是新建空库切流，未重跑历史升级脚本；启动 DDL/DML 仍仅用于首次初始化。两个凭据轮换 timer 已恢复，签名与 APNs 凭据未更换。
+
+11:53 北京时间恢复，IM active/running、NRestarts=0，实际 classpath 与制品匹配；公网 `/im/health/ready` 200，单聊设置匿名 401。IM 与业务库自定义触发器／函数均为 0，停写快照与启动前逐表计数一致。完整 Server 63 项、本地 HTTP 联调与七类云端检查通过；没有发送生产测试消息或验证真机推送。
+
+双库备份、迁移、切换及回退边界统一见[业务生产记录](https://github.com/bitlap/snapflow/blob/master/docs/history/2026-11-26.md#application-writes-production)。IM 最终备份 126,437 字节，SHA-256 `ac4897a78d88a1d107418e3de46185be2e00e868690b7a46980ed454daafccf2`，位于服务器受限 `/home/snap/deploy-backups/sql-workflows-20261126/backup/`；pg_restore 目录校验通过，未进行完整恢复演练。
